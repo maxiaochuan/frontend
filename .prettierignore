@@ -1,0 +1,8 @@
+**/.DS_Store
+**/*.md
+**/*.svg
+**/*.ejs
+**/*.html
+package.json
+.umi
+**/*.snap
