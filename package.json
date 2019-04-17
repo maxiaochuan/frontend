@@ -1,0 +1,28 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Front End",
+  "homepage": "https://github.com/maxiaochuan/frontend#readme",
+  "bugs": {
+    "url": "https://github.com/maxiaochuan/frontend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxiaochuan/frontend.git"
+  },
+  "author": "Xiaochuan Ma <mxcins@gmail.com>",
+  "scripts": {
+    "start": "umi dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@mxcins/lodash": "1.0.0",
+    "react": "16.8.3",
+    "react-dom": "16.8.3",
+    "umi": "2.6.13",
+    "umi-plugin-react": "1.7.4"
+  },
+  "devDependencies": {
+    "@mxcins/types": "1.0.0"
+  }
+}
