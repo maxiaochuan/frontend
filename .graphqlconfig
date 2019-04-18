@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "frontend": {
+      "schemaPath": "src/graphql/schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "dev": "http://localhost:3000/graphql"
+        }
+      }
+    }
+  }
+}
