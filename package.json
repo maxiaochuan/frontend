@@ -20,7 +20,7 @@
     "lint-staged:ts": "tslint --fix \"src/**/*.ts*\"",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
     "lint:ts": "tslint --fix \"src/**/*.ts*\"",
-    "prettier": "prettier --write \"./src/**/*\" \"./typings/**/*\"",
+    "prettier": "prettier --write \"./src/**/*\" \"./typings/**/*\" \"./config/**/*\"",
     "test": "umi test",
     "ts-compile-check": "tsc -p tsconfig.json --noEmit"
   },

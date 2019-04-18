@@ -1,4 +1,4 @@
-import { Omit, IReactComponent } from '@mxcins/types';
+import { IReactComponent, Omit } from '@mxcins/types';
 import { DocumentNode } from 'graphql';
 import React from 'react';
 import { OperationVariables, Query, QueryResult } from 'react-apollo';
