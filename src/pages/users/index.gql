@@ -2,5 +2,11 @@ query Users {
   users {
     id
     name
+    createdAt
+    updatedAt
+    microposts {
+      id
+      content
+    }
   }
 }

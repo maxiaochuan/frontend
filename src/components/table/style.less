@@ -1,0 +1,47 @@
+.table {
+  ul {
+    margin-bottom: 0;
+    // padding-left: 14px;
+    padding-left: 0;
+    list-style: none;
+    a {
+      white-space: nowrap;
+    }
+  }
+  :global {
+    .ant-collapse-borderless {
+      background: transparent;
+    }
+    .ant-pagination.ant-table-pagination:first-child {
+      position: absolute;
+      right: 6px;
+      z-index: 2;
+      margin: 12px 0;
+    }
+    .ant-table .ant-table-title {
+      padding: 0 12px;
+      // padding-left: 0;
+    }
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+      padding-left: 20px;
+      .ant-collapse-arrow {
+        left: 0;
+      }
+    }
+    .ant-collapse > .ant-collapse-item {
+      border-bottom: none;
+    }
+    .ant-table-small > .ant-table-content > .ant-table-body {
+      margin: 0;
+    }
+  }
+  .header {
+    .row {
+      margin-bottom: 12px;
+      line-height: 32px;
+    }
+    .search {
+      flex: auto;
+    }
+  }
+}
