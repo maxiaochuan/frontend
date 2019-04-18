@@ -1151,10 +1151,10 @@
   resolved "http://registry.npm.taobao.org/@mxcins/lodash/download/@mxcins/lodash-1.0.0.tgz#8e5f84d57abe8e99e758ac38a99eebc3dc5c31b9"
   integrity sha1-jl+E1Xq+jpnnWKw4qZ7rw9xcMbk=
 
-"@mxcins/types@1.0.0":
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/@mxcins/types/download/@mxcins/types-1.0.0.tgz#9fef91eb1f652f5da25ea775ff0dd8738277ba3a"
-  integrity sha1-n++R6x9lL12iXqd1/w3Yc4J3ujo=
+"@mxcins/types@1.0.1":
+  version "1.0.1"
+  resolved "http://registry.npm.sbuild.cn/@mxcins%2ftypes/-/types-1.0.1.tgz#40fe0d4b22af1c6cdb1221b81b80326527f03deb"
+  integrity sha1-QP4NSyKvHGzbEiG4G4AyZSfwPes=
   dependencies:
     "@types/history" "4.7.2"
     "@types/react" "16.8.8"
@@ -1258,6 +1258,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/graphql@14.2.0":
+  version "14.2.0"
+  resolved "http://registry.npm.sbuild.cn/@types%2fgraphql/-/graphql-14.2.0.tgz#74e1da5f2a4a744ac6eb3ed57b48242ea9367202"
+  integrity sha1-dOHaXypKdErG6z7Ve0gkLqk2cgI=
 
 "@types/history@*", "@types/history@4.7.2":
   version "4.7.2"
@@ -1404,6 +1409,11 @@
   version "12.0.12"
   resolved "http://registry.npm.taobao.org/@types/yargs/download/@types/yargs-12.0.12.tgz#45dd1d0638e8c8f153e87d296907659296873916"
   integrity sha1-Rd0dBjjoyPFT6H0paQdlkpaHORY=
+
+"@types/zen-observable@^0.8.0":
+  version "0.8.0"
+  resolved "http://registry.npm.sbuild.cn/@types%2fzen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
+  integrity sha1-i2OrfxqlMhJIqtWsiQpIVlbc6k0=
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -1900,6 +1910,85 @@ anymatch@^2.0.0:
   dependencies:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
+
+apollo-cache-inmemory@1.5.1:
+  version "1.5.1"
+  resolved "http://registry.npm.sbuild.cn/apollo-cache-inmemory/-/apollo-cache-inmemory-1.5.1.tgz#265d1ee67b0bf0aca9c37629d410bfae44e62953"
+  integrity sha1-Jl0e5nsL8Kypw3Yp1BC/rkTmKVM=
+  dependencies:
+    apollo-cache "^1.2.1"
+    apollo-utilities "^1.2.1"
+    optimism "^0.6.9"
+    ts-invariant "^0.2.1"
+    tslib "^1.9.3"
+
+apollo-cache@1.2.1, apollo-cache@^1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.sbuild.cn/apollo-cache/-/apollo-cache-1.2.1.tgz#aae71eb4a11f1f7322adc343f84b1a39b0693644"
+  integrity sha1-qucetKEfH3MircND+EsaObBpNkQ=
+  dependencies:
+    apollo-utilities "^1.2.1"
+    tslib "^1.9.3"
+
+apollo-client@2.5.1:
+  version "2.5.1"
+  resolved "http://registry.npm.sbuild.cn/apollo-client/-/apollo-client-2.5.1.tgz#36126ed1d32edd79c3713c6684546a3bea80e6d1"
+  integrity sha1-NhJu0dMu3XnDcTxmhFRqO+qA5tE=
+  dependencies:
+    "@types/zen-observable" "^0.8.0"
+    apollo-cache "1.2.1"
+    apollo-link "^1.0.0"
+    apollo-link-dedup "^1.0.0"
+    apollo-utilities "1.2.1"
+    symbol-observable "^1.0.2"
+    ts-invariant "^0.2.1"
+    tslib "^1.9.3"
+    zen-observable "^0.8.0"
+
+apollo-link-dedup@^1.0.0:
+  version "1.0.18"
+  resolved "http://registry.npm.sbuild.cn/apollo-link-dedup/-/apollo-link-dedup-1.0.18.tgz#635cb5659b082e7f270f7649c4b0f71021f7bb4b"
+  integrity sha1-Y1y1ZZsILn8nD3ZJxLD3ECH3u0s=
+  dependencies:
+    apollo-link "^1.2.11"
+    tslib "^1.9.3"
+
+apollo-link-http-common@^0.2.13:
+  version "0.2.13"
+  resolved "http://registry.npm.sbuild.cn/apollo-link-http-common/-/apollo-link-http-common-0.2.13.tgz#c688f6baaffdc7b269b2db7ae89dae7c58b5b350"
+  integrity sha1-xoj2uq/9x7Jpstt66J2ufFi1s1A=
+  dependencies:
+    apollo-link "^1.2.11"
+    ts-invariant "^0.3.2"
+    tslib "^1.9.3"
+
+apollo-link-http@1.5.14:
+  version "1.5.14"
+  resolved "http://registry.npm.sbuild.cn/apollo-link-http/-/apollo-link-http-1.5.14.tgz#ed6292248d1819ccd16523e346d35203a1b31109"
+  integrity sha1-7WKSJI0YGczRZSPjRtNSA6GzEQk=
+  dependencies:
+    apollo-link "^1.2.11"
+    apollo-link-http-common "^0.2.13"
+    tslib "^1.9.3"
+
+apollo-link@^1.0.0, apollo-link@^1.2.11:
+  version "1.2.11"
+  resolved "http://registry.npm.sbuild.cn/apollo-link/-/apollo-link-1.2.11.tgz#493293b747ad3237114ccd22e9f559e5e24a194d"
+  integrity sha1-STKTt0etMjcRTM0i6fVZ5eJKGU0=
+  dependencies:
+    apollo-utilities "^1.2.1"
+    ts-invariant "^0.3.2"
+    tslib "^1.9.3"
+    zen-observable-ts "^0.8.18"
+
+apollo-utilities@1.2.1, apollo-utilities@^1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.sbuild.cn/apollo-utilities/-/apollo-utilities-1.2.1.tgz#1c3a1ebf5607d7c8efe7636daaf58e7463b41b3c"
+  integrity sha1-HDoev1YH18jv52NtqvWOdGO0Gzw=
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
+    ts-invariant "^0.2.1"
+    tslib "^1.9.3"
 
 append-field@^1.0.0:
   version "1.0.0"
@@ -5680,6 +5769,18 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "http://registry.npm.taobao.org/graceful-fs/download/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha1-/7cD4QZuig7qpMi4C6klPu77+wA=
 
+graphql-tag@2.10.1:
+  version "2.10.1"
+  resolved "http://registry.npm.sbuild.cn/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
+  integrity sha1-EKpB8c2PrlNz6vEfH2cmCjytXgI=
+
+graphql@14.2.1:
+  version "14.2.1"
+  resolved "http://registry.npm.sbuild.cn/graphql/-/graphql-14.2.1.tgz#779529bf9a01e7207b977a54c20670b48ca6e95c"
+  integrity sha1-d5Upv5oB5yB7l3pUwgZwtIym6Vw=
+  dependencies:
+    iterall "^1.2.2"
+
 grouped-queue@^0.3.3:
   version "0.3.3"
   resolved "http://registry.npm.taobao.org/grouped-queue/download/grouped-queue-0.3.3.tgz#c167d2a5319c5a0e0964ef6a25b7c2df8996c85c"
@@ -6185,6 +6286,11 @@ immutability-helper@^2.7.1:
   integrity sha1-ccQjujh+Z7bGzroGUFcvKipnJ98=
   dependencies:
     invariant "^2.2.0"
+
+immutable-tuple@^0.4.9:
+  version "0.4.10"
+  resolved "http://registry.npm.sbuild.cn/immutable-tuple/-/immutable-tuple-0.4.10.tgz#e0b1625384f514084a7a84b749a3bb26e9179929"
+  integrity sha1-4LFiU4T1FAhKeoS3SaO7JukXmSk=
 
 immutable@^3.7.4:
   version "3.8.2"
@@ -6952,6 +7058,11 @@ isurl@^1.0.0-alpha5:
   dependencies:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
+
+iterall@^1.2.2:
+  version "1.2.2"
+  resolved "http://registry.npm.sbuild.cn/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
+  integrity sha1-ktcN64Ao4MOf8xZP2/TYsIgTDNc=
 
 javascript-stringify@^1.6.0:
   version "1.6.0"
@@ -8903,6 +9014,13 @@ opn@^5.1.0:
   dependencies:
     is-wsl "^1.1.0"
 
+optimism@^0.6.9:
+  version "0.6.9"
+  resolved "http://registry.npm.sbuild.cn/optimism/-/optimism-0.6.9.tgz#19258ff8b3be0cea29ac35f06bff818e026e30bb"
+  integrity sha1-GSWP+LO+DOoprDXwa/+BjgJuMLs=
+  dependencies:
+    immutable-tuple "^0.4.9"
+
 optimist@^0.6.1:
   version "0.6.1"
   resolved "http://registry.npm.taobao.org/optimist/download/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
@@ -10622,6 +10740,18 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-apollo@2.5.4:
+  version "2.5.4"
+  resolved "http://registry.npm.sbuild.cn/react-apollo/-/react-apollo-2.5.4.tgz#4b5ad2e9e38001521d072445acdb5b3b5489b22d"
+  integrity sha1-S1rS6eOAAVIdByRFrNtbO1SJsi0=
+  dependencies:
+    apollo-utilities "^1.2.1"
+    hoist-non-react-statics "^3.3.0"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+    ts-invariant "^0.3.2"
+    tslib "^1.9.3"
 
 react-dev-utils@7.0.3:
   version "7.0.3"
@@ -12541,7 +12671,7 @@ svgo@^1.0.0, svgo@^1.1.1:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-symbol-observable@^1.0.3, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
+symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/symbol-observable/download/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha1-wiaIrtTqs83C3+rLtWFmBWCgCAQ=
@@ -12811,6 +12941,20 @@ tryer@^1.0.0:
   resolved "http://registry.npm.taobao.org/tryer/download/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha1-8shUBoALmw90yfdGW4HqrSQSUvg=
 
+ts-invariant@^0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.sbuild.cn/ts-invariant/-/ts-invariant-0.2.1.tgz#3d587f9d6e3bded97bf9ec17951dd9814d5a9d3f"
+  integrity sha1-PVh/nW473tl7+ewXlR3ZgU1anT8=
+  dependencies:
+    tslib "^1.9.3"
+
+ts-invariant@^0.3.2:
+  version "0.3.3"
+  resolved "http://registry.npm.sbuild.cn/ts-invariant/-/ts-invariant-0.3.3.tgz#b5742b1885ecf9e29c31a750307480f045ec0b16"
+  integrity sha1-tXQrGIXs+eKcMadQMHSA8EXsCxY=
+  dependencies:
+    tslib "^1.9.3"
+
 ts-loader@5.3.3:
   version "5.3.3"
   resolved "http://registry.npm.taobao.org/ts-loader/download/ts-loader-5.3.3.tgz#8b4af042e773132d86b3c99ef0acf3b4d325f473"
@@ -12822,7 +12966,7 @@ ts-loader@5.3.3:
     micromatch "^3.1.4"
     semver "^5.0.1"
 
-tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.9.3"
   resolved "http://registry.npm.taobao.org/tslib/download/tslib-1.9.3.tgz?cache=0&other_urls=http%3A%2F%2Fregistry.npm.taobao.org%2Ftslib%2Fdownload%2Ftslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha1-1+TdeSRdhUKMTX5IIqeZF5VMooY=
@@ -14345,6 +14489,19 @@ yup@^0.26.10:
     property-expr "^1.5.0"
     synchronous-promise "^2.0.5"
     toposort "^2.0.2"
+
+zen-observable-ts@^0.8.18:
+  version "0.8.18"
+  resolved "http://registry.npm.sbuild.cn/zen-observable-ts/-/zen-observable-ts-0.8.18.tgz#ade44b1060cc4a800627856ec10b9c67f5f639c8"
+  integrity sha1-reRLEGDMSoAGJ4VuwQucZ/X2Ocg=
+  dependencies:
+    tslib "^1.9.3"
+    zen-observable "^0.8.0"
+
+zen-observable@^0.8.0:
+  version "0.8.14"
+  resolved "http://registry.npm.sbuild.cn/zen-observable/-/zen-observable-0.8.14.tgz#d33058359d335bc0db1f0af66158b32872af3bf7"
+  integrity sha1-0zBYNZ0zW8DbHwr2YVizKHKvO/c=
 
 zscroller@~0.4.0:
   version "0.4.8"
