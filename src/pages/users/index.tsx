@@ -4,7 +4,7 @@ import React, { SFC } from 'react';
 import { QueryResult } from 'react-apollo';
 
 import { Table } from '@/components';
-import { attach } from '@/decorators';
+import { attachQuery } from '@/decorators';
 import { GQLUser } from '@/graphql/generated';
 
 import * as services from './services.gql';
@@ -20,4 +20,4 @@ const Users: SFC<IRouteComponentProps & QueryResult<{ users: GQLUser[] }>> = pro
   );
 };
 
-export default attach(services.Users)(Users);
+export default attachQuery(services.Users)(Users);

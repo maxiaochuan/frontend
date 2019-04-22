@@ -3,7 +3,7 @@ import { DocumentNode } from 'graphql';
 import React from 'react';
 import { OperationVariables, Query, QueryResult } from 'react-apollo';
 
-export default function attach<
+export default function attachQuery<
   D extends {} = any,
   V extends OperationVariables = OperationVariables
 >(query: DocumentNode, variables?: V) {
