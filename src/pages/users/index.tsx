@@ -9,7 +9,9 @@ import { GQLUser } from '@/graphql/generated';
 
 import * as services from './services.gql';
 
-const Users: SFC<IRouteComponentProps & QueryResult<{ users: GQLUser[] }>> = props => {
+export interface IUsers extends IRouteComponentProps, QueryResult<{ users: GQLUser[] }> {}
+
+const Users: SFC<IUsers> = props => {
   return (
     <Spin spinning={props.loading}>
       <Table
