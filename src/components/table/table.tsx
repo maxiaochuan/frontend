@@ -98,13 +98,15 @@ const complicatedColumnPropsGenerator = <T extends any>(
   width: 100,
   sorter: !props.tree && props.sortable,
   ...extend,
-  onCell: record => ({
-    key,
-    dataIndex: key,
-    record,
-    rowKey: props.rowKey || DEFAULT_ROW_KEY,
-    editing: state.editKey === record[props.rowKey || DEFAULT_ROW_KEY],
-  }),
+  onCell: props.controllers
+    ? record => ({
+        key,
+        dataIndex: key,
+        record,
+        rowKey: props.rowKey || DEFAULT_ROW_KEY,
+        editing: state.editKey === record[props.rowKey || DEFAULT_ROW_KEY],
+      })
+    : undefined,
 });
 
 const controllersColumnPropsGenerator = <T extends any>(key: string, extend: IColumnExtend<T>) => ({
@@ -238,7 +240,7 @@ class Table<T extends { [x: string]: any } = any> extends Component<
    */
   private renderColumns = (columns: string[]) => {
     const { searchWords, editKey } = this.state;
-    const { rowKey = DEFAULT_ROW_KEY, columnExtends = {}, controllers = {} } = this.props;
+    const { rowKey = DEFAULT_ROW_KEY, columnExtends = {}, controllers } = this.props;
 
     const propsArray = columns.map(c => {
       const props = complicatedColumnPropsGenerator(
@@ -264,7 +266,9 @@ class Table<T extends { [x: string]: any } = any> extends Component<
       propsArray.push(props);
     }
 
-    return propsArray.map(props => <Base.Column key={props.key} {...props} />);
+    return propsArray.map(props => {
+      return <Base.Column key={props.key} {...props} />;
+    });
   };
 
   /**

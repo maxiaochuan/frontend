@@ -11,6 +11,7 @@ export interface IRenderOpts<T> {
 export const highlightRender = <T extends {}>(input: string | number, opts: IRenderOpts<T>) => {
   return (
     <HighlightWords
+      key={opts.complicated.key}
       highlightStyle={{ backgroundColor: 'transparent', padding: 0, color: 'rgb(252, 110, 91)' }}
       searchWords={opts.searchWords || []}
       textToHighlight={typeof input === 'number' ? `${input}` : input}

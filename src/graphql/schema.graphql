@@ -8,15 +8,21 @@ type Micropost {
 }
 
 type Mutation {
-  """An example field added by the generator"""
+  """
+  An example field added by the generator
+  """
   testField: String!
 }
 
 type Query {
-  """Find user by ID"""
+  """
+  Find user by ID
+  """
   user(id: ID!): User
 
-  """All Users"""
+  """
+  All Users
+  """
   users: [User!]
 }
 

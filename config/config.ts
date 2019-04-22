@@ -2,6 +2,7 @@ import { IConfig } from '@mxcins/types';
 
 const config: IConfig = {
   hash: true,
+  ignoreMomentLocale: true,
   targets: {
     ie: 11,
   },
