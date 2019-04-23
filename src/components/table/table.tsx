@@ -84,8 +84,8 @@ const Table: SFC<ITableFullProps> = props => {
           ? renderControllerColumn(props, editKey, {
               onEdit: setEditKey,
               onCancel: setEditKey,
-              onEditSubmit: id => onUpdate(id, props),
-              onDestory: id => onDestory(id, props),
+              onEditSubmit: id => onUpdate(id, props, setEditKey),
+              onDestory: id => onDestory(id, props, setEditKey),
             })
           : null}
       </Base>

@@ -19,7 +19,7 @@ export const download = (data: any[]) =>
     }),
   );
 
-export const onDestory = async (id: number | string, props: ITableFullProps) => {
+export const onDestory = async (id: number | string, props: ITableFullProps, cb: any) => {
   const { controllers, match } = props;
   try {
     if (controllers) {
@@ -31,16 +31,19 @@ export const onDestory = async (id: number | string, props: ITableFullProps) => 
       if (props.refetch) {
         await props.refetch();
       }
+      return;
     }
   } catch (error) {
     if (error.response) {
       message.error(JSON.stringify(error.data));
       return;
     }
+  } finally {
+    cb();
   }
 };
 
-export const onUpdate = async (id: number | string, props: ITableFullProps) => {
+export const onUpdate = async (id: number | string, props: ITableFullProps, cb: any) => {
   const { controllers, match } = props;
   const [error, values] = await new Promise(resolve => {
     props.form.validateFields((e, v) => resolve([e, v]));
@@ -57,6 +60,9 @@ export const onUpdate = async (id: number | string, props: ITableFullProps) => {
         data: values,
       });
       message.success(JSON.stringify(resp));
+      if (props.refetch) {
+        await props.refetch();
+      }
       return;
     }
   } catch (error) {
@@ -64,6 +70,8 @@ export const onUpdate = async (id: number | string, props: ITableFullProps) => {
       message.error(JSON.stringify(error.data));
       return;
     }
+  } finally {
+    cb();
   }
 };
 

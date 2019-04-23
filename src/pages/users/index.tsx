@@ -15,10 +15,12 @@ const Users: SFC<IUsers> = props => {
   return (
     <Spin spinning={props.loading}>
       <Table
+        defaultColumns={['id', 'name', 'microposts']}
         data={(props.data && props.data.users) || []}
+        refetch={props.refetch}
         controllers={{
-          update: '/users/:id.json',
-          delete: '/users/:id.json',
+          update: '/api/users/:id.json',
+          delete: '/api/users/:id.json',
         }}
       />
     </Spin>
