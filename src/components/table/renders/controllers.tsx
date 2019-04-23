@@ -1,28 +1,24 @@
 import { Col, Popconfirm, Row } from 'antd';
 import React, { Fragment } from 'react';
 
-import Anchor from '../anchor';
-import { Render } from './render';
-import { IControllers } from './table';
+import { Anchor } from '@/components';
 
-export interface IControllersProps {
-  controllers: IControllers;
-}
+import { IObjectType, Render } from '../interface';
 
-const controllerRenderGenerator = <T extends { [x: string]: any }>(
+const controllerRenderGenerator = <T extends IObjectType>(
   handlers: {
-    onEdit: (item: T) => void;
+    onEdit: (id: string | number) => void;
     onEditSubmit: (id: string | number) => void;
-    onCancel: () => void;
+    onCancel: (id: undefined) => void;
     onDestory: (id: string | number) => void;
   },
   rowKey: string,
   editKey?: string | number,
 ): Render<T> => (_, item) => {
-  // TODO: 类型检测
-  const onEdit = () => handlers.onEdit(item);
+  const onEdit = () => handlers.onEdit(item[rowKey]);
   const onEditSubmit = () => handlers.onEditSubmit(item[rowKey]);
   const onDestory = () => handlers.onDestory(item[rowKey]);
+  const onCancel = () => handlers.onCancel(undefined);
 
   const isEditCurrent = editKey === item[rowKey];
 
@@ -36,7 +32,7 @@ const controllerRenderGenerator = <T extends { [x: string]: any }>(
             </Popconfirm>
           </Col>
           <Col>
-            <Anchor href="#" onClick={handlers.onCancel}>
+            <Anchor href="#" onClick={onCancel}>
               Cancel
             </Anchor>
           </Col>

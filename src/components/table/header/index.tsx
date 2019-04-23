@@ -2,11 +2,14 @@ import { Button, Col, Row } from 'antd';
 import React, { SFC } from 'react';
 
 import styles from '../style.less';
-import { ITPS, ITS } from '../table';
 import Search from './search';
 import Selector from './selector';
 
-export interface ITHPS<T extends { [x: string]: any } = any> extends ITPS<T>, ITS<T> {
+export interface ITableHeaderProps {
+  percent: [number, number];
+  columns: string[];
+  totalColumns: string[];
+  searchWords: string[];
   onColumnsChange: (columns: string[]) => void;
   onSearch: (inputs: string[]) => void;
   onDownload: () => void;
@@ -28,8 +31,8 @@ const Download: SFC<any> = props => (
   </Col>
 );
 
-const Header: SFC<ITHPS> = props => {
-  const { dataSource = [], data = [] } = props;
+const Header: SFC<ITableHeaderProps> = props => {
+  const { percent } = props;
 
   return (
     <Row className={styles.header}>
@@ -41,7 +44,7 @@ const Header: SFC<ITHPS> = props => {
       <Col span={24} className={styles.row}>
         <Row type="flex" gutter={12}>
           <Search className={styles.search} onSearch={props.onSearch} />
-          <Percent current={dataSource.length} total={data.length} />
+          <Percent current={percent[0]} total={percent[1]} />
           <Download onDownload={props.onDownload} />
         </Row>
       </Col>

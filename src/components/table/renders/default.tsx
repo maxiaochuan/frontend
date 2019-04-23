@@ -1,12 +1,7 @@
 import { isObject } from '@mxcins/lodash';
 import React from 'react';
 import HighlightWords from 'react-highlight-words';
-import { IColumnExtend } from './table';
-
-export interface IRenderOpts<T> {
-  searchWords?: string[];
-  complicated: IColumnExtend<T>;
-}
+import { DefaultRenderGenerator, IRenderOpts } from '../interface';
 
 export const highlightRender = <T extends {}>(input: string | number, opts: IRenderOpts<T>) => {
   return (
@@ -55,9 +50,6 @@ export const arrayRender = <T extends {}>(items: any[], opts: IRenderOpts<T>) =>
   return items.map(item => unknownRender(item, opts));
 };
 
-export type Render<T extends {} = any> = (text: any, record: T, index: number) => React.ReactNode;
-type RenderGenerator = <T>(opts: IRenderOpts<T>) => Render<T>;
-
-export const renderGenerator: RenderGenerator = opts => {
+export const renderGenerator: DefaultRenderGenerator = opts => {
   return text => (Array.isArray(text) ? arrayRender(text, opts) : unknownRender(text, opts));
 };

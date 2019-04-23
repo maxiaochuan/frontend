@@ -1,6 +1,9 @@
 import { isNumber, isObject } from '@mxcins/lodash';
+import request from '@mxcins/request';
 import { Downloader } from '@mxcins/utils';
+import { message } from 'antd';
 import omit from 'omit.js';
+import { ITableFullProps } from './table';
 
 export const download = (data: any[]) =>
   Downloader.csv(
@@ -16,14 +19,52 @@ export const download = (data: any[]) =>
     }),
   );
 
-export const totalColumnsGenerator = <T extends {}>(data: T[] = []): string[] => {
-  if (data.length) {
-    const item = data[0];
-    if (!Array.isArray(item) && typeof item === 'object') {
-      return Object.keys(item).filter(i => i !== 'children' && i !== 'pid');
+export const onDestory = async (id: number | string, props: ITableFullProps) => {
+  const { controllers, match } = props;
+  try {
+    if (controllers) {
+      const resp = await request(controllers.delete, {
+        params: { ...match.params, id },
+        method: 'DELETE',
+      });
+      message.success(`Delete success, ${JSON.stringify(resp)}`);
+      if (props.refetch) {
+        await props.refetch();
+      }
+    }
+  } catch (error) {
+    if (error.response) {
+      message.error(JSON.stringify(error.data));
+      return;
     }
   }
-  return [];
+};
+
+export const onUpdate = async (id: number | string, props: ITableFullProps) => {
+  const { controllers, match } = props;
+  const [error, values] = await new Promise(resolve => {
+    props.form.validateFields((e, v) => resolve([e, v]));
+  });
+  if (error) {
+    message.error(JSON.stringify(error));
+    return;
+  }
+  try {
+    if (controllers) {
+      const resp = await request(controllers.update, {
+        method: 'PATCH',
+        params: { ...match.params, id },
+        data: values,
+      });
+      message.success(JSON.stringify(resp));
+      return;
+    }
+  } catch (error) {
+    if (error.response) {
+      message.error(JSON.stringify(error.data));
+      return;
+    }
+  }
 };
 
 export const any2string = (input: any): string => {
@@ -51,7 +92,6 @@ export const cacheGenerator = <T extends { [x: string]: any }>(
     prev[item[rowKey]] = any2string(omit(item, keys));
     return prev;
   }, init);
-  return init;
 };
 
 export function compareFunctionGenerator<T>(key: keyof T, order: 'ascend' | 'descend') {

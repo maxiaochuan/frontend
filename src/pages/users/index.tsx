@@ -16,7 +16,10 @@ const Users: SFC<IUsers> = props => {
     <Spin spinning={props.loading}>
       <Table
         data={(props.data && props.data.users) || []}
-        controllers={{ update: '/users/:id.json' }}
+        controllers={{
+          update: '/users/:id.json',
+          delete: '/users/:id.json',
+        }}
       />
     </Spin>
   );

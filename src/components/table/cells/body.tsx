@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd';
 import React, { SFC } from 'react';
 
-import { FormContext } from './table';
+import { FormContext } from '../table';
 
 export interface ICellProps {
   one?: any;
