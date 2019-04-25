@@ -1,35 +1,25 @@
+import { Omit } from '@mxcins/types';
 import { Checkbox, Col, Collapse } from 'antd';
-import React, { SFC, useEffect, useRef, useState } from 'react';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import React, { SFC } from 'react';
+
+import { Context } from '../context';
 
 export interface ISelectorProps {
-  columns?: string[];
-  totalColumns?: string[];
-  onColumnsChange?: (columns: string[]) => void;
+  selected: string[];
+  options: string[];
+  onChange: (values: CheckboxValueType[]) => void;
 }
 
 const Selector: SFC<ISelectorProps> = props => {
-  const [options, setOptions] = useState([] as Array<{ value: string; label: string }>);
-
-  const handlers = useRef({
-    onChange: (values: Array<string | number | boolean>) => {
-      if (props.onColumnsChange) {
-        props.onColumnsChange(values as string[]);
-      }
-    },
-  });
-  useEffect(() => {
-    if (props.totalColumns) {
-      setOptions(props.totalColumns.map(c => ({ value: c, label: c.toUpperCase() })));
-    }
-  }, [props.totalColumns]);
   return (
     <Col>
       <Collapse bordered={false}>
         <Collapse.Panel key="selection" header={'header'}>
           <Checkbox.Group
-            options={options}
-            value={props.columns}
-            onChange={handlers.current.onChange}
+            options={props.options}
+            value={props.selected}
+            onChange={props.onChange}
           />
         </Collapse.Panel>
       </Collapse>
@@ -37,8 +27,18 @@ const Selector: SFC<ISelectorProps> = props => {
   );
 };
 
-Selector.defaultProps = {
-  columns: [],
-};
-
-export default Selector;
+export default (props: Omit<ISelectorProps, 'selected' | 'options' | 'onChange'>) => (
+  <Context.Consumer>
+    {v => {
+      const onChange = (payload: any[]) => v.dispatch({ type: 'COLUMNS_CURRENT', payload });
+      return (
+        <Selector
+          {...props}
+          selected={v.state.columns.current}
+          options={v.state.columns.total}
+          onChange={onChange}
+        />
+      );
+    }}
+  </Context.Consumer>
+);

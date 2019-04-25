@@ -86,13 +86,23 @@ export const any2string = (input: any): string => {
   return '';
 };
 
+export const totalColumnsGenerator = <T extends {}>(data: T[] = []): string[] => {
+  if (data.length) {
+    const item = data[0];
+    if (!Array.isArray(item) && typeof item === 'object') {
+      return Object.keys(item).filter(i => i !== 'children' && i !== 'pid');
+    }
+  }
+  return [];
+};
+
 export const cacheGenerator = <T extends { [x: string]: any }>(
   rowKey: string,
   columns: string[],
   data: T[] = [],
 ) => {
   const init: { [x: string]: string } = {};
-  if (!data.length) {
+  if (!data.length || !columns.length) {
     return init;
   }
   const keys = Object.keys(data[0]).filter(k => columns.indexOf(k) === -1);

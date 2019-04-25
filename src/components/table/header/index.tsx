@@ -7,11 +7,6 @@ import Selector from './selector';
 
 export interface ITableHeaderProps {
   percent: [number, number];
-  columns: string[];
-  totalColumns: string[];
-  searchWords: string[];
-  onColumnsChange: (columns: string[]) => void;
-  onSearch: (inputs: string[]) => void;
   onDownload: () => void;
 }
 
@@ -36,14 +31,10 @@ const Header: SFC<ITableHeaderProps> = props => {
 
   return (
     <Row className={styles.header}>
-      <Selector
-        columns={props.columns}
-        totalColumns={props.totalColumns}
-        onColumnsChange={props.onColumnsChange}
-      />
+      <Selector />
       <Col span={24} className={styles.row}>
         <Row type="flex" gutter={12}>
-          <Search className={styles.search} onSearch={props.onSearch} />
+          <Search className={styles.search} />
           <Percent current={percent[0]} total={percent[1]} />
           <Download onDownload={props.onDownload} />
         </Row>

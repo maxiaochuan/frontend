@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd';
 import React, { SFC } from 'react';
 
-import { FormContext } from '../table';
+import { Context } from '../context';
 
 export interface ICellProps {
   one?: any;
@@ -14,8 +14,11 @@ const Cell: SFC<any> = props => {
     record && (typeof record[dataIndex] === 'number' || typeof record[dataIndex] === 'string');
 
   return (
-    <FormContext.Consumer>
-      {form => {
+    <Context.Consumer>
+      {({ form }) => {
+        if (!form) {
+          return children;
+        }
         const { getFieldDecorator } = form;
         return (
           <td {...others}>
@@ -37,7 +40,7 @@ const Cell: SFC<any> = props => {
           </td>
         );
       }}
-    </FormContext.Consumer>
+    </Context.Consumer>
   );
 };
 

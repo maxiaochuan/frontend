@@ -1,5 +1,8 @@
+import { Omit } from '@mxcins/types';
 import { Col, Input } from 'antd';
 import React, { SFC, useRef } from 'react';
+
+import { Context } from '../context';
 
 export interface ISearchProps {
   className?: string;
@@ -29,4 +32,11 @@ Search.defaultProps = {
   onSearch: () => undefined,
 };
 
-export default Search;
+export default (props: Omit<ISearchProps, 'onSearch'>) => (
+  <Context.Consumer>
+    {v => {
+      const onSearch = (payload: any[]) => v.dispatch({ type: 'SEARCH', payload });
+      return <Search {...props} onSearch={onSearch} />;
+    }}
+  </Context.Consumer>
+);

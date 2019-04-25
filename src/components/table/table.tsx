@@ -1,16 +1,15 @@
 import { IRouteComponentProps } from '@mxcins/types';
 import { Form, Table as Base } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { createContext, SFC, useEffect, useState } from 'react';
+import React, { SFC, useEffect, useReducer, useState } from 'react';
 import { withRouter } from 'react-router';
 
 import Cell from './cells/body';
 import { renderColumns, renderControllerColumn } from './columns';
+import { Context, reducer } from './context';
 import Header, { ITableHeaderProps } from './header';
-import { useColumns, useTotalColumns } from './hooks';
 import { IObjectType, ITableProps } from './interface';
-import { cacheGenerator, download, onDestory, onUpdate } from './utils';
+import { download, onDestory, onUpdate } from './utils';
 
 import styles from './style.less';
 
@@ -24,51 +23,33 @@ export interface ITableFullProps<T extends IObjectType = IObjectType>
 
 export const renderHeader = (props: ITableHeaderProps) => () => <Header {...props} />;
 
-export const FormContext = createContext<WrappedFormUtils>({} as any);
-
-const INIT_SEARCH_WORKDS: string[] = [];
-const INIT_SEARCH_CACHE: IObjectType = {};
 const CONTROLLER_COMPONENTS = { body: { cell: Cell } };
 
 const Table: SFC<ITableFullProps> = props => {
-  const totalColumns = useTotalColumns(props.data);
-  const [columns, setColumns] = useColumns(props.defaultColumns, totalColumns);
-  const [searchWords, onSearch] = useState(INIT_SEARCH_WORKDS);
-  const [searchCache, setSearchCache] = useState(INIT_SEARCH_CACHE);
-  const [dataSource, setDataSource] = useState([] as IObjectType[]);
+  const [state, dispatch] = useReducer(reducer, {
+    unique: props.rowKey || DEFAULT_ROWKEY,
+    cache: [],
+    data: [],
+    columns: {
+      current: props.defaultColumns || [],
+      default: props.defaultColumns || [],
+      total: [],
+    },
+    searchCache: {},
+    searchWords: [],
+  });
+
+  useEffect(() => dispatch({ type: 'DATA', payload: props.data }), [props.data]);
+
   const [editKey, setEditKey] = useState<string>();
 
-  const { rowKey = DEFAULT_ROWKEY } = props;
-
-  useEffect(() => {
-    const cache = cacheGenerator(rowKey, columns, props.data);
-    setSearchCache(cache);
-  }, [props.data, columns]);
-
-  useEffect(() => {
-    if (searchWords.length) {
-      const init: IObjectType = {};
-      const keys = Object.keys(searchCache)
-        .filter(key => searchWords.some(input => searchCache[key].includes(input)))
-        .reduce((prev, key) => (prev[key] = true) && prev, init);
-      setDataSource((props.data || []).filter(d => keys[d[rowKey]]));
-    } else {
-      setDataSource(props.data || []);
-    }
-  }, [searchWords, props.data]);
-
   const title = renderHeader({
-    percent: [(dataSource && dataSource.length) || 0, (props.data && props.data.length) || 0],
-    columns,
-    totalColumns,
-    onColumnsChange: setColumns,
-    searchWords,
-    onSearch,
-    onDownload: () => download(dataSource),
+    percent: [state.data.length, state.cache.length],
+    onDownload: () => download(state.data),
   });
 
   return (
-    <FormContext.Provider value={props.form}>
+    <Context.Provider value={{ state, dispatch, form: props.form }}>
       <Base
         className={styles.table}
         rowKey={props.rowKey}
@@ -76,10 +57,10 @@ const Table: SFC<ITableFullProps> = props => {
         loading={props.loading}
         bordered={props.bordered}
         size={props.size}
-        dataSource={dataSource}
+        dataSource={state.data}
         title={title}
       >
-        {renderColumns(columns, props, { editKey, searchWords })}
+        {renderColumns(state.columns.current, props, { editKey, searchWords: state.searchWords })}
         {props.controllers
           ? renderControllerColumn(props, editKey, {
               onEdit: setEditKey,
@@ -89,7 +70,7 @@ const Table: SFC<ITableFullProps> = props => {
             })
           : null}
       </Base>
-    </FormContext.Provider>
+    </Context.Provider>
   );
 };
 
