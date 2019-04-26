@@ -1,76 +1,37 @@
-import { IRouteComponentProps } from '@mxcins/types';
-import { Form, Table as Base } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
-import React, { SFC, useEffect, useReducer, useState } from 'react';
-import { withRouter } from 'react-router';
+import { Table as Base } from 'antd';
+import React, { SFC, useContext } from 'react';
 
-import Cell from './cells/body';
-import { renderColumns, renderControllerColumn } from './columns';
-import { Context, reducer } from './context';
-import Header, { ITableHeaderProps } from './header';
-import { IObjectType, ITableProps } from './interface';
-import { download, onDestory, onUpdate } from './utils';
-
+import { BodyCell } from './cells';
+import { renderController, renderCurrent } from './columns';
+import withContext, { Context } from './context';
+import Header from './header';
+import { ITableProps } from './interface';
 import styles from './style.less';
 
 export const DEFAULT_ROWKEY = 'id';
 export const DEFAULT_SIZE = 'small';
 
-export interface ITableFullProps<T extends IObjectType = IObjectType>
-  extends ITableProps<T>,
-    FormComponentProps,
-    IRouteComponentProps {}
+const CONTROLLER_COMPONENTS = { body: { cell: BodyCell } };
 
-export const renderHeader = (props: ITableHeaderProps) => () => <Header {...props} />;
+const header = () => <Header />;
 
-const CONTROLLER_COMPONENTS = { body: { cell: Cell } };
-
-const Table: SFC<ITableFullProps> = props => {
-  const [state, dispatch] = useReducer(reducer, {
-    unique: props.rowKey || DEFAULT_ROWKEY,
-    cache: [],
-    data: [],
-    columns: {
-      current: props.defaultColumns || [],
-      default: props.defaultColumns || [],
-      total: [],
-    },
-    searchCache: {},
-    searchWords: [],
-  });
-
-  useEffect(() => dispatch({ type: 'DATA', payload: props.data }), [props.data]);
-
-  const [editKey, setEditKey] = useState<string>();
-
-  const title = renderHeader({
-    percent: [state.data.length, state.cache.length],
-    onDownload: () => download(state.data),
-  });
+const Table: SFC<ITableProps> = props => {
+  const { state } = useContext(Context);
 
   return (
-    <Context.Provider value={{ state, dispatch, form: props.form }}>
-      <Base
-        className={styles.table}
-        rowKey={props.rowKey}
-        components={props.controllers ? CONTROLLER_COMPONENTS : undefined}
-        loading={props.loading}
-        bordered={props.bordered}
-        size={props.size}
-        dataSource={state.data}
-        title={title}
-      >
-        {renderColumns(state.columns.current, props, { editKey, searchWords: state.searchWords })}
-        {props.controllers
-          ? renderControllerColumn(props, editKey, {
-              onEdit: setEditKey,
-              onCancel: setEditKey,
-              onEditSubmit: id => onUpdate(id, props, setEditKey),
-              onDestory: id => onDestory(id, props, setEditKey),
-            })
-          : null}
-      </Base>
-    </Context.Provider>
+    <Base
+      className={styles.table}
+      rowKey={props.rowKey}
+      components={CONTROLLER_COMPONENTS}
+      loading={props.loading}
+      bordered={props.bordered}
+      size={props.size}
+      dataSource={state.dataSource}
+      title={header}
+    >
+      {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
+      {props.controllers ? renderController() : null}
+    </Base>
   );
 };
 
@@ -78,7 +39,7 @@ const Table: SFC<ITableFullProps> = props => {
  * default props
  */
 Table.defaultProps = {
-  data: [],
+  dataSource: [],
 
   sortable: true,
 
@@ -87,4 +48,4 @@ Table.defaultProps = {
   bordered: true,
 };
 
-export default withRouter(Form.create()(Table));
+export default withContext(Table);

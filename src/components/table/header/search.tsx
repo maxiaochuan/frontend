@@ -28,10 +28,6 @@ const Search: SFC<ISearchProps> = props => {
   );
 };
 
-Search.defaultProps = {
-  onSearch: () => undefined,
-};
-
 export default (props: Omit<ISearchProps, 'onSearch'>) => (
   <Context.Consumer>
     {v => {

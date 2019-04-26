@@ -1,30 +1,26 @@
-import { IRouteComponentProps } from '@mxcins/types';
-import { Spin } from 'antd';
+import { IObjectType, IRouteComponentProps } from '@mxcins/types';
 import React, { SFC } from 'react';
-import { QueryResult } from 'react-apollo';
 
 import { Table } from '@/components';
-import { attachQuery } from '@/decorators';
-import { GQLUser } from '@/graphql/generated';
 
 import * as services from './services.gql';
 
-export interface IUsers extends IRouteComponentProps, QueryResult<{ users: GQLUser[] }> {}
+export interface IUsers extends IRouteComponentProps<IObjectType> {}
 
-const Users: SFC<IUsers> = props => {
+const columnExtends = {
+  name: { editing: true },
+};
+
+const Users: SFC<IUsers> = () => {
   return (
-    <Spin spinning={props.loading}>
-      <Table
-        defaultColumns={['id', 'name', 'microposts']}
-        data={(props.data && props.data.users) || []}
-        refetch={props.refetch}
-        controllers={{
-          update: '/api/users/:id.json',
-          delete: '/api/users/:id.json',
-        }}
-      />
-    </Spin>
+    <Table
+      klass="user"
+      query={services.Users}
+      columnExtends={columnExtends}
+      defaultColumns={['id', 'name', 'microposts']}
+      controllers={true}
+    />
   );
 };
 
-export default attachQuery(services.Users)(Users);
+export default Users;

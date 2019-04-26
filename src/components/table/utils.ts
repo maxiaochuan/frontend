@@ -1,9 +1,12 @@
 import { isNumber, isObject } from '@mxcins/lodash';
 import request from '@mxcins/request';
+import { IObjectType } from '@mxcins/types';
 import { Downloader } from '@mxcins/utils';
 import { message } from 'antd';
 import omit from 'omit.js';
-import { ITableFullProps } from './table';
+
+import getApi from '@/common/api';
+import { IColumnExtend, ITableProps } from './interface';
 
 export const download = (data: any[]) =>
   Downloader.csv(
@@ -19,20 +22,23 @@ export const download = (data: any[]) =>
     }),
   );
 
-export const onDestory = async (id: number | string, props: ITableFullProps, cb: any) => {
-  const { controllers, match } = props;
+export const destoryHandler = async (
+  id: number | string,
+  klass: string,
+  params: IObjectType,
+  async: () => Promise<any>,
+  cb: any,
+) => {
   try {
-    if (controllers) {
-      const resp = await request(controllers.delete, {
-        params: { ...match.params, id },
-        method: 'DELETE',
-      });
-      message.success(`Delete success, ${JSON.stringify(resp)}`);
-      if (props.refetch) {
-        await props.refetch();
-      }
-      return;
+    await request(getApi(klass), {
+      params: { ...params, id },
+      method: 'DELETE',
+    });
+    message.success('Delete Success');
+    if (async) {
+      await async();
     }
+    return;
   } catch (error) {
     if (error.response) {
       message.error(JSON.stringify(error.data));
@@ -43,7 +49,7 @@ export const onDestory = async (id: number | string, props: ITableFullProps, cb:
   }
 };
 
-export const onUpdate = async (id: number | string, props: ITableFullProps, cb: any) => {
+export const updateHandler = async (id: number | string, props: ITableProps, cb: any) => {
   const { controllers, match } = props;
   const [error, values] = await new Promise(resolve => {
     props.form.validateFields((e, v) => resolve([e, v]));
@@ -54,7 +60,7 @@ export const onUpdate = async (id: number | string, props: ITableFullProps, cb: 
   }
   try {
     if (controllers) {
-      const resp = await request(controllers.update, {
+      const resp = await request('', {
         method: 'PATCH',
         params: { ...match.params, id },
         data: values,
@@ -94,6 +100,29 @@ export const totalColumnsGenerator = <T extends {}>(data: T[] = []): string[] =>
     }
   }
   return [];
+};
+
+export const columnExtendsGenerator = (
+  columns: string[],
+  columnExtends: IObjectType<IColumnExtend>,
+): IObjectType<IColumnExtend> => {
+  return columns.reduce((prev, key) => {
+    const columnExtend = columnExtends[key] || {};
+    prev[key] = {
+      key,
+      dataIndex: key,
+      width: 100,
+      title: key,
+      ...columnExtend,
+      onCell: (item, index) => ({
+        editing: columnExtend.editing,
+        dataIndex: key,
+        item,
+        index,
+      }),
+    };
+    return prev;
+  }, columnExtends);
 };
 
 export const cacheGenerator = <T extends { [x: string]: any }>(

@@ -1,47 +1,59 @@
-import { Form, Input } from 'antd';
-import React, { SFC } from 'react';
+import { IObjectType } from '@mxcins/types';
+import { Form, Input, InputNumber } from 'antd';
+import React, { SFC, useContext } from 'react';
 
 import { Context } from '../context';
 
-export interface ICellProps {
-  one?: any;
+export interface IBodyCellProps<T extends IObjectType = IObjectType> {
+  editing?: boolean;
+  dataIndex: string;
+  rowIndex: number;
+  item: T;
 }
 
-const Cell: SFC<any> = props => {
-  const { record, children, dataIndex, editing, searchWords, rowKey, ...others } = props;
+const inputGenerator = (v: any) => {
+  const type = typeof v;
 
-  const canEdit =
-    record && (typeof record[dataIndex] === 'number' || typeof record[dataIndex] === 'string');
+  switch (type) {
+    case 'number':
+      return <InputNumber />;
+
+    default:
+      return <Input />;
+  }
+};
+
+const BodyCell: SFC<IBodyCellProps> = props => {
+  const {
+    form,
+    state: { rowKey, editKey },
+  } = useContext(Context);
+  const { children, dataIndex, rowIndex, editing, item, ...others } = props;
+  if (!form || !editKey || !item || editKey !== item[rowKey]) {
+    return <td {...others}>{children}</td>;
+  }
+
+  const { getFieldDecorator } = form;
 
   return (
-    <Context.Consumer>
-      {({ form }) => {
-        if (!form) {
-          return children;
-        }
-        const { getFieldDecorator } = form;
-        return (
-          <td {...others}>
-            {editing && dataIndex !== rowKey && canEdit ? (
-              <Form.Item style={{ margin: 0 }}>
-                {getFieldDecorator(dataIndex as string, {
-                  // rules: [
-                  //   {
-                  //     required: true,
-                  //     message: `Please Input ${dataIndex}!`,
-                  //   },
-                  // ],
-                  initialValue: record[dataIndex],
-                })(<Input />)}
-              </Form.Item>
-            ) : (
-              children
-            )}
-          </td>
-        );
-      }}
-    </Context.Consumer>
+    <td {...others}>
+      {editing ? (
+        <Form.Item style={{ margin: 0 }}>
+          {getFieldDecorator(dataIndex as string, {
+            // rules: [
+            //   {
+            //     required: true,
+            //     message: `Please Input ${dataIndex}!`,
+            //   },
+            // ],
+            initialValue: item[dataIndex],
+          })(inputGenerator(item[dataIndex]))}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
   );
 };
 
-export default Cell;
+export default BodyCell;

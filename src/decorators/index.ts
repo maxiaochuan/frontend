@@ -1,3 +1,4 @@
+export * from './attach-query';
 export { default as attachQuery } from './attach-query';
 
 export * from './attach-mutation';

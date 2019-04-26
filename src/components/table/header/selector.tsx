@@ -15,7 +15,7 @@ const Selector: SFC<ISelectorProps> = props => {
   return (
     <Col>
       <Collapse bordered={false}>
-        <Collapse.Panel key="selection" header={'header'}>
+        <Collapse.Panel key="selection" header="header">
           <Checkbox.Group
             options={props.options}
             value={props.selected}

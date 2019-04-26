@@ -1,8 +1,19 @@
+import { IObjectType, IRouteComponentProps, Omit } from '@mxcins/types';
+import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/lib/table';
 
-export interface ITableProps<T extends IObjectType = IObjectType> {
-  klass?: string;
-  data?: T[];
+import { AttachQueryProps } from '@/decorators';
+
+export interface ITableProps<T extends IObjectType = IObjectType>
+  extends ITableCommonProps<T>,
+    FormComponentProps,
+    IRouteComponentProps,
+    AttachQueryProps {}
+
+export interface ITableCommonProps<T extends IObjectType = IObjectType> {
+  klass: string;
+  params?: IObjectType;
+  dataSource?: T[];
   defaultColumns?: string[];
   columnExtends?: { [x: string]: IColumnExtend<T> };
 
@@ -11,11 +22,7 @@ export interface ITableProps<T extends IObjectType = IObjectType> {
   /**
    * 控制列
    */
-  controllers?: {
-    update: string;
-    delete: string;
-  };
-  refetch?: () => void;
+  controllers?: boolean;
   /**
    * 树结构
    */
@@ -28,15 +35,12 @@ export interface ITableProps<T extends IObjectType = IObjectType> {
   bordered?: boolean;
   // pagination?: PaginationConfig | false;
   rowKey?: string;
-  loading?: boolean;
 }
 
-export interface IObjectType {
-  [x: string]: any;
-}
-
-export interface IColumnExtend<T extends IObjectType = IObjectType> extends ColumnProps<T> {
+export interface IColumnExtend<T extends IObjectType = IObjectType>
+  extends Omit<ColumnProps<T>, 'render'> {
   link?: { name?: string; to: string; params?: any };
+  editing?: boolean;
 }
 
 export interface IRenderOpts<T> {
