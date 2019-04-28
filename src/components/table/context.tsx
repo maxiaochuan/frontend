@@ -1,10 +1,16 @@
 import { IObjectType, IReactComponent } from '@mxcins/types';
-import React, { createContext, Dispatch, Reducer, useEffect, useReducer } from 'react';
+import React, { createContext, Dispatch, Reducer, SFC, useEffect, useReducer } from 'react';
 import { withRouter } from 'react-router';
 
 import { IWrappedFormUtils, withForm } from '@/decorators';
+import { SorterResult } from 'antd/lib/table';
 import { IColumnExtend, ITableProps } from './interface';
-import { cacheGenerator, columnExtendsGenerator, totalColumnsGenerator } from './utils';
+import {
+  cacheGenerator,
+  columnExtendsGenerator,
+  compareFunctionGenerator,
+  totalColumnsGenerator,
+} from './utils';
 
 interface IState {
   klass: string;
@@ -21,6 +27,9 @@ interface IState {
     x?: boolean | number | string;
     y?: boolean | number | string;
   };
+
+  sortable?: boolean;
+  sorter?: SorterResult<any>;
 }
 
 interface IAction {
@@ -62,74 +71,99 @@ export const Context = createContext<{
 });
 
 export type ActionType =
-  | 'DATA'
+  | 'RETRIEVE_DATA'
   | 'SEARCH'
   | 'COLUMNS_CURRENT'
   | 'COLUMN_EXTENDS'
   | 'EDIT'
-  | 'RESIZE';
+  | 'RESIZE'
+  | 'SORT';
 
-const onSearch = (words: string[], cache: IObjectType, data: any[], rowKey: string) => {
-  if (!words.length) {
-    return data;
+const dataGenerator = ({ cache, searchCache, searchWords, rowKey, sorter }: IState) => {
+  let result = [...cache];
+  if (searchWords.length) {
+    const init: IObjectType = {};
+    const keys = Object.keys(searchCache)
+      .filter(key => searchWords.some(input => searchCache[key].includes(input)))
+      .reduce((prev, key) => (prev[key] = true) && prev, init);
+
+    result = result.filter(d => keys[d[rowKey]]);
   }
-  const init: IObjectType = {};
-  const keys = Object.keys(cache)
-    .filter(key => words.some(input => cache[key].includes(input)))
-    .reduce((prev, key) => (prev[key] = true) && prev, init);
 
-  return data.filter(d => keys[d[rowKey]]);
+  if (sorter && sorter.field) {
+    const compare = compareFunctionGenerator(sorter.field, sorter.order);
+    result.sort(compare);
+  }
+
+  return result;
 };
 
 export const reducer: Reducer<IState, IAction> = (state, action) => {
   // tslint:disable-next-line:no-console
   console.log('reducer', action);
   switch (action.type) {
-    case 'DATA':
-      const d = state.columns.default;
-      const total = totalColumnsGenerator(action.payload);
+    case 'RETRIEVE_DATA': {
+      const cache = action.payload as any[];
+      const total = totalColumnsGenerator(cache);
       const columns: IColumns = { ...state.columns };
+      const d = state.columns.default;
       if (total.length) {
         columns.total = total;
         if (!d.length) {
           columns.current = [...total];
         }
       }
-      return {
+      const next = {
         ...state,
-        cache: action.payload,
-        data: action.payload,
+        cache,
         columns,
-        searchCache: cacheGenerator(state.rowKey, columns.current, action.payload),
-        columnExtends: columnExtendsGenerator(columns.current, state.columnExtends),
+        searchCache: cacheGenerator(state.rowKey, columns.current, cache),
+        columnExtends: columnExtendsGenerator(columns.current, state.columnExtends, {
+          sortable: state.sortable,
+        }),
       };
-    case 'SEARCH':
-      return {
+
+      next.data = dataGenerator(next);
+      return next;
+    }
+    case 'SEARCH': {
+      const next = {
         ...state,
         searchWords: action.payload,
-        data: onSearch(action.payload, state.searchCache, state.cache, state.rowKey),
       };
-    case 'COLUMNS_CURRENT':
-      return {
+      next.data = dataGenerator(next);
+      return next;
+    }
+    case 'COLUMNS_CURRENT': {
+      const next = {
         ...state,
         columns: {
           ...state.columns,
           current: action.payload,
         },
-        columnExtends: columnExtendsGenerator(action.payload, state.columnExtends),
-        searchCache: cacheGenerator(state.rowKey, action.payload, action.payload),
+        columnExtends: columnExtendsGenerator(action.payload, state.columnExtends, {
+          sortable: state.sortable,
+        }),
+        searchCache: cacheGenerator(state.rowKey, action.payload, state.cache),
       };
-    case 'COLUMN_EXTENDS':
+      next.data = dataGenerator(next);
+      return next;
+    }
+    case 'COLUMN_EXTENDS': {
       return {
         ...state,
-        columnExtends: columnExtendsGenerator(state.columns.current, action.payload),
+        columnExtends: columnExtendsGenerator(state.columns.current, action.payload, {
+          sortable: state.sortable,
+        }),
       };
-    case 'EDIT':
+    }
+    case 'EDIT': {
       return {
         ...state,
         editKey: action.payload,
       };
-    case 'RESIZE':
+    }
+    case 'RESIZE': {
       const style = window.getComputedStyle(action.payload);
       const wrapperWidth = parseInt(style.width as string, 10);
       const width = Object.values(state.columnExtends).reduce((prev, c) => {
@@ -146,18 +180,28 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
         };
       }
       return state;
+    }
+    case 'SORT': {
+      const sorter = action.payload as SorterResult<any>;
+      const next = {
+        ...state,
+        sorter,
+      };
+      next.data = dataGenerator(next);
+      return next;
+    }
     default:
       return state;
   }
 };
 
 const DEFAULT_ROWKEY = 'id';
-
+const DEFAULT_SIZE = 'small';
 const DEFAULT_DATA: any[] = [];
 
 export default function withContext(component: IReactComponent<ITableProps>) {
   const Comp = component;
-  const Component = (props: ITableProps) => {
+  const Component: SFC<ITableProps> = (props: ITableProps) => {
     const [state, dispatch] = useReducer(reducer, {
       klass: props.klass,
       params: { ...props.match.params, ...(props.params || {}) },
@@ -172,11 +216,13 @@ export default function withContext(component: IReactComponent<ITableProps>) {
       columnExtends: {},
       searchCache: {},
       searchWords: [],
+
+      sortable: props.sortable,
     });
 
     const data = props.data || DEFAULT_DATA;
 
-    useEffect(() => dispatch({ type: 'DATA', payload: data }), [data]);
+    useEffect(() => dispatch({ type: 'RETRIEVE_DATA', payload: data }), [data]);
 
     useEffect(() => dispatch({ type: 'COLUMN_EXTENDS', payload: props.columnExtends }), [
       props.columnExtends,
@@ -194,6 +240,14 @@ export default function withContext(component: IReactComponent<ITableProps>) {
         <Comp {...props} />
       </Context.Provider>
     );
+  };
+
+  Component.defaultProps = {
+    data: [],
+    sortable: true,
+    rowKey: DEFAULT_ROWKEY,
+    size: DEFAULT_SIZE,
+    bordered: true,
   };
 
   return withRouter(withForm(Component));

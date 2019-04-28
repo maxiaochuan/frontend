@@ -2,15 +2,13 @@ import { Table as Base } from 'antd';
 import { debounce } from 'lodash-es';
 import React, { SFC, useContext, useEffect, useRef } from 'react';
 
+import { SorterResult } from 'antd/lib/table';
 import { BodyCell } from './cells';
 import { renderController, renderCurrent } from './columns';
 import withContext, { Context } from './context';
 import Header from './header';
 import { ITableProps } from './interface';
 import styles from './style.less';
-
-export const DEFAULT_ROWKEY = 'id';
-export const DEFAULT_SIZE = 'small';
 
 const CONTROLLER_COMPONENTS = { body: { cell: BodyCell } };
 
@@ -28,6 +26,14 @@ const Table: SFC<ITableProps> = props => {
     };
   }, []);
 
+  const handlers = useRef({
+    onChange: (
+      _PAGE: any, // PaginationConfig,
+      _RECORD: any, // Record<keyof T, string[]>,
+      sorter: SorterResult<any>,
+    ) => dispatch({ type: 'SORT', payload: sorter }),
+  });
+
   return (
     <div ref={wrapper}>
       <Base
@@ -40,25 +46,13 @@ const Table: SFC<ITableProps> = props => {
         dataSource={state.data}
         title={header}
         scroll={state.scroll}
+        onChange={handlers.current.onChange}
       >
         {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
         {props.controllers ? renderController() : null}
       </Base>
     </div>
   );
-};
-
-/**
- * default props
- */
-Table.defaultProps = {
-  data: [],
-
-  sortable: true,
-
-  rowKey: DEFAULT_ROWKEY,
-  size: DEFAULT_SIZE,
-  bordered: true,
 };
 
 export default withContext(Table);

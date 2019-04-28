@@ -43,6 +43,7 @@ export const totalColumnsGenerator = <T extends {}>(data: T[] = []): string[] =>
 export const columnExtendsGenerator = (
   columns: string[],
   columnExtends: IObjectType<IColumnExtend>,
+  { sortable }: { sortable?: boolean },
 ): IObjectType<IColumnExtend> => {
   return columns.reduce((prev, key) => {
     const columnExtend = columnExtends[key] || {};
@@ -51,6 +52,7 @@ export const columnExtendsGenerator = (
       dataIndex: key,
       width: 200,
       title: key,
+      sorter: sortable,
       ...columnExtend,
       onCell: (item, index) => ({
         editing: columnExtend.editing,
