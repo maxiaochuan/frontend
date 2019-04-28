@@ -15,7 +15,7 @@ const config: IConfig = {
           default: 'zh-CN',
         },
         dynamicImport: {},
-        dll: {},
+        // dll: {},
       },
     ],
   ],

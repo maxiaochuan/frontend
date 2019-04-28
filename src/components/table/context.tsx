@@ -17,6 +17,10 @@ interface IState {
   searchCache: IObjectType<string>;
   searchWords: string[];
   editKey?: string;
+  scroll?: {
+    x?: boolean | number | string;
+    y?: boolean | number | string;
+  };
 }
 
 interface IAction {
@@ -57,7 +61,13 @@ export const Context = createContext<{
   refetch: () => Promise.resolve(),
 });
 
-export type ActionType = 'DATA' | 'SEARCH' | 'COLUMNS_CURRENT' | 'COLUMN_EXTENDS' | 'EDIT';
+export type ActionType =
+  | 'DATA'
+  | 'SEARCH'
+  | 'COLUMNS_CURRENT'
+  | 'COLUMN_EXTENDS'
+  | 'EDIT'
+  | 'RESIZE';
 
 const onSearch = (words: string[], cache: IObjectType, data: any[], rowKey: string) => {
   if (!words.length) {
@@ -76,7 +86,6 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
   console.log('reducer', action);
   switch (action.type) {
     case 'DATA':
-      // 数据更新时，同时更新当前数据和总的列
       const d = state.columns.default;
       const total = totalColumnsGenerator(action.payload);
       const columns: IColumns = { ...state.columns };
@@ -120,6 +129,23 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
         ...state,
         editKey: action.payload,
       };
+    case 'RESIZE':
+      const style = window.getComputedStyle(action.payload);
+      const wrapperWidth = parseInt(style.width as string, 10);
+      const width = Object.values(state.columnExtends).reduce((prev, c) => {
+        prev += c.width as number;
+        return prev;
+      }, 0);
+      if (wrapperWidth < width) {
+        return {
+          ...state,
+          scroll: {
+            ...state.scroll,
+            x: width,
+          },
+        };
+      }
+      return state;
     default:
       return state;
   }

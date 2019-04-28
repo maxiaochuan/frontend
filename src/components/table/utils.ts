@@ -49,7 +49,7 @@ export const columnExtendsGenerator = (
     prev[key] = {
       key,
       dataIndex: key,
-      width: 100,
+      width: 200,
       title: key,
       ...columnExtend,
       onCell: (item, index) => ({

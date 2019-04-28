@@ -1,5 +1,6 @@
 import { Table as Base } from 'antd';
-import React, { SFC, useContext } from 'react';
+import { debounce } from 'lodash-es';
+import React, { SFC, useContext, useEffect, useRef } from 'react';
 
 import { BodyCell } from './cells';
 import { renderController, renderCurrent } from './columns';
@@ -16,22 +17,34 @@ const CONTROLLER_COMPONENTS = { body: { cell: BodyCell } };
 const header = () => <Header />;
 
 const Table: SFC<ITableProps> = props => {
-  const { state } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
+  const wrapper = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const resize = debounce(() => dispatch({ type: 'RESIZE', payload: wrapper.current }), 2000);
+    window.addEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
 
   return (
-    <Base
-      className={styles.table}
-      rowKey={props.rowKey}
-      components={CONTROLLER_COMPONENTS}
-      loading={props.loading}
-      bordered={props.bordered}
-      size={props.size}
-      dataSource={state.data}
-      title={header}
-    >
-      {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
-      {props.controllers ? renderController() : null}
-    </Base>
+    <div ref={wrapper}>
+      <Base
+        className={styles.table}
+        rowKey={props.rowKey}
+        components={CONTROLLER_COMPONENTS}
+        loading={props.loading}
+        bordered={props.bordered}
+        size={props.size}
+        dataSource={state.data}
+        title={header}
+        scroll={state.scroll}
+      >
+        {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
+        {props.controllers ? renderController() : null}
+      </Base>
+    </div>
   );
 };
 
