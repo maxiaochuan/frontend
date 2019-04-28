@@ -1,9 +1,9 @@
 import { Input } from 'antd';
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
 import React, { SFC } from 'react';
 
 import { Form } from '@/components';
-import { attachMutation, IMutationProps } from '@/decorators';
+import { IMutationProps } from '@/decorators';
 import { GQLUser, MutationToCreateUserArgs } from '@/graphql/generated';
 
 export interface IUserProps
@@ -14,14 +14,14 @@ export interface IUserProps
     MutationToCreateUserArgs
   > {}
 
-const CREATE_USER = gql`
-  mutation CreateUser($name: String!, $email: String!) {
-    createUser(name: $name, email: $email) {
-      name
-      email
-    }
-  }
-`;
+// const CREATE_USER = gql`
+//   mutation CreateUser($name: String!, $email: String!) {
+//     createUser(name: $name, email: $email) {
+//       name
+//       email
+//     }
+//   }
+// `;
 
 const User: SFC<IUserProps> = props => {
   return (
@@ -32,9 +32,4 @@ const User: SFC<IUserProps> = props => {
   );
 };
 
-export default attachMutation<
-  {
-    createUser: GQLUser;
-  },
-  MutationToCreateUserArgs
->(CREATE_USER)(User);
+export default User;

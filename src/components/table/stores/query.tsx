@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { attachQuery, IAttachQueryResultProps } from '@/decorators';
+import { IWithQueryResultProps, withQuery } from '@/decorators';
 import { ITableCommonProps } from '../interface';
 import Table from '../table';
 
 const DEFAULT_DATA: any[] = [];
 
-export default attachQuery<ITableCommonProps & IAttachQueryResultProps>(props => {
-
+export default withQuery<ITableCommonProps & IWithQueryResultProps>(props => {
   const { queryResult, ...others } = props;
   let data = DEFAULT_DATA;
   if (queryResult.data) {
@@ -17,5 +16,7 @@ export default attachQuery<ITableCommonProps & IAttachQueryResultProps>(props =>
     }
   }
 
-  return <Table {...others} data={data} loading={queryResult.loading} refetch={queryResult.refetch} />
-})
+  return (
+    <Table {...others} data={data} loading={queryResult.loading} refetch={queryResult.refetch} />
+  );
+});

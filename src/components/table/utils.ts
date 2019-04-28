@@ -1,12 +1,9 @@
 import { isNumber, isObject } from '@mxcins/lodash';
-import request from '@mxcins/request';
 import { IObjectType } from '@mxcins/types';
 import { Downloader } from '@mxcins/utils';
-import { message } from 'antd';
 import omit from 'omit.js';
 
-import getApi from '@/common/api';
-import { IColumnExtend, ITableProps } from './interface';
+import { IColumnExtend } from './interface';
 
 export const download = (data: any[]) =>
   Downloader.csv(
@@ -21,67 +18,6 @@ export const download = (data: any[]) =>
       );
     }),
   );
-
-export const destoryHandler = async (
-  id: number | string,
-  klass: string,
-  params: IObjectType,
-  async?: () => Promise<any>,
-  end?: any,
-) => {
-  try {
-    await request(getApi(klass), {
-      params: { ...params, id },
-      method: 'DELETE',
-    });
-    message.success('Delete Success');
-    if (async) {
-      await async();
-    }
-    return;
-  } catch (error) {
-    if (error.response) {
-      message.error(JSON.stringify(error.data));
-      return;
-    }
-  } finally {
-    if (end && typeof end === 'function') {
-      end();
-    }
-  }
-};
-
-export const updateHandler = async (id: number | string, props: ITableProps, cb: any) => {
-  const { controllers, match } = props;
-  const [error, values] = await new Promise(resolve => {
-    props.form.validateFields((e, v) => resolve([e, v]));
-  });
-  if (error) {
-    message.error(JSON.stringify(error));
-    return;
-  }
-  try {
-    if (controllers) {
-      const resp = await request('', {
-        method: 'PATCH',
-        params: { ...match.params, id },
-        data: values,
-      });
-      message.success(JSON.stringify(resp));
-      if (props.refetch) {
-        await props.refetch();
-      }
-      return;
-    }
-  } catch (error) {
-    if (error.response) {
-      message.error(JSON.stringify(error.data));
-      return;
-    }
-  } finally {
-    cb();
-  }
-};
 
 export const any2string = (input: any): string => {
   if (typeof input === 'object' && input) {

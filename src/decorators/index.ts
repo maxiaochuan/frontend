@@ -1,5 +1,8 @@
-export * from './attach-query';
-export { default as attachQuery } from './attach-query';
+export * from './with-query';
+export { default as withQuery } from './with-query';
 
-export * from './attach-mutation';
-export { default as attachMutation } from './attach-mutation';
+export * from './with-mutation';
+export { default as withMutation } from './with-mutation';
+
+export * from './with-form';
+export { default as withForm } from './with-form';

@@ -29,7 +29,7 @@ const BodyCell: SFC<IBodyCellProps> = props => {
     state: { rowKey, editKey },
   } = useContext(Context);
   const { children, dataIndex, rowIndex, editing, item, ...others } = props;
-  if (!form || !editKey || !item || editKey !== item[rowKey]) {
+  if (!editing || !form || !editKey || !item || editKey !== item[rowKey]) {
     return <td {...others}>{children}</td>;
   }
 
@@ -37,21 +37,17 @@ const BodyCell: SFC<IBodyCellProps> = props => {
 
   return (
     <td {...others}>
-      {editing ? (
-        <Form.Item style={{ margin: 0 }}>
-          {getFieldDecorator(dataIndex as string, {
-            // rules: [
-            //   {
-            //     required: true,
-            //     message: `Please Input ${dataIndex}!`,
-            //   },
-            // ],
-            initialValue: item[dataIndex],
-          })(inputGenerator(item[dataIndex]))}
-        </Form.Item>
-      ) : (
-        children
-      )}
+      <Form.Item style={{ margin: 0 }}>
+        {getFieldDecorator(dataIndex as string, {
+          // rules: [
+          //   {
+          //     required: true,
+          //     message: `Please Input ${dataIndex}!`,
+          //   },
+          // ],
+          initialValue: item[dataIndex],
+        })(inputGenerator(item[dataIndex]))}
+      </Form.Item>
     </td>
   );
 };

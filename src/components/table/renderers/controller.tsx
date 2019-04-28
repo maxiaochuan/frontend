@@ -5,20 +5,18 @@ import { withRouter } from 'react-router';
 
 import { Anchor } from '@/components';
 import { Context } from '../context';
-import { destoryHandler } from '../utils';
 import { IDefaultRendererProps } from './default';
 
 export interface IControllerRendererProps<T extends IObjectType = IObjectType>
   extends IDefaultRendererProps<T>,
     IRouteComponentProps<IObjectType> {}
 
-const onEditSubmit = () => undefined;
-
 const ControllerRenderer: SFC<IControllerRendererProps> = props => {
   const {
-    state: { klass, params, editKey, rowKey },
+    state: { editKey, rowKey },
     refetch,
     dispatch,
+    form,
   } = useContext(Context);
   const id = props.item[rowKey];
   const isEditCurrent = editKey === id;
@@ -26,8 +24,24 @@ const ControllerRenderer: SFC<IControllerRendererProps> = props => {
   const onEdit = () => dispatch({ type: 'EDIT', payload: id });
   const onCancel = () => dispatch({ type: 'EDIT', payload: '' });
 
-  // const onEditSubmit = () =>
-  const onDestory = () => destoryHandler(id, klass, params, refetch, onCancel);
+  const onEditSubmit = () =>
+    form &&
+    form.onUpdate(
+      { params: { id } },
+      {
+        onSuccess: refetch,
+        onFinally: onCancel,
+      },
+    );
+  const onDestory = () =>
+    form &&
+    form.onDestory(
+      { params: { id } },
+      {
+        onSuccess: refetch,
+        onFinally: onCancel,
+      },
+    );
 
   return (
     <Row type="flex" gutter={12} style={{ justifyContent: 'space-around' }}>

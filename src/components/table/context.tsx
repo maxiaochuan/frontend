@@ -1,9 +1,8 @@
 import { IObjectType, IReactComponent } from '@mxcins/types';
-import { Form } from 'antd';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { createContext, Dispatch, Reducer, useEffect, useReducer } from 'react';
 import { withRouter } from 'react-router';
 
+import { IWrappedFormUtils, withForm } from '@/decorators';
 import { IColumnExtend, ITableProps } from './interface';
 import { cacheGenerator, columnExtendsGenerator, totalColumnsGenerator } from './utils';
 
@@ -51,7 +50,7 @@ export const Context = createContext<{
   state: IState;
   dispatch: Dispatch<{ type: ActionType; payload: any }>;
   refetch?: () => Promise<any>;
-  form?: WrappedFormUtils;
+  form?: IWrappedFormUtils;
 }>({
   state: DEFAULT_TABLE_STATE,
   dispatch: () => undefined,
@@ -74,15 +73,18 @@ const onSearch = (words: string[], cache: IObjectType, data: any[], rowKey: stri
 
 export const reducer: Reducer<IState, IAction> = (state, action) => {
   // tslint:disable-next-line:no-console
-  console.log('action', action);
+  console.log('reducer', action);
   switch (action.type) {
     case 'DATA':
       // 数据更新时，同时更新当前数据和总的列
       const d = state.columns.default;
       const total = totalColumnsGenerator(action.payload);
-      const columns: IColumns = { ...state.columns, total };
-      if (!d.length) {
-        columns.current = [...total];
+      const columns: IColumns = { ...state.columns };
+      if (total.length) {
+        columns.total = total;
+        if (!d.length) {
+          columns.current = [...total];
+        }
       }
       return {
         ...state,
@@ -90,7 +92,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
         data: action.payload,
         columns,
         searchCache: cacheGenerator(state.rowKey, columns.current, action.payload),
-        columnExtends: columnExtendsGenerator(columns.current, {}),
+        columnExtends: columnExtendsGenerator(columns.current, state.columnExtends),
       };
     case 'SEARCH':
       return {
@@ -105,7 +107,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
           ...state.columns,
           current: action.payload,
         },
-        columnExtends: columnExtendsGenerator(action.payload, {}),
+        columnExtends: columnExtendsGenerator(action.payload, state.columnExtends),
         searchCache: cacheGenerator(state.rowKey, action.payload, action.payload),
       };
     case 'COLUMN_EXTENDS':
@@ -141,7 +143,7 @@ export default function withContext(component: IReactComponent<ITableProps>) {
         default: props.defaultColumns || [],
         total: props.defaultColumns || [],
       },
-      columnExtends: props.columnExtends || {},
+      columnExtends: {},
       searchCache: {},
       searchWords: [],
     });
@@ -155,11 +157,18 @@ export default function withContext(component: IReactComponent<ITableProps>) {
     ]);
 
     return (
-      <Context.Provider value={{ state, dispatch, form: props.form, refetch: props.refetch }}>
+      <Context.Provider
+        value={{
+          state,
+          dispatch,
+          form: props.form,
+          refetch: props.refetch,
+        }}
+      >
         <Comp {...props} />
       </Context.Provider>
     );
   };
 
-  return withRouter(Form.create()(Component));
+  return withRouter(withForm(Component));
 }
