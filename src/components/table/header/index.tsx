@@ -9,12 +9,12 @@ import Selector from './selector';
 
 const Percent: SFC = () => {
   const {
-    state: { cache, dataSource },
+    state: { cache, data },
   } = useContext(Context);
   return (
     <Col>
       <span>
-        {dataSource.length} / {cache.length}
+        {data.length} / {cache.length}
       </span>
     </Col>
   );
@@ -22,11 +22,11 @@ const Percent: SFC = () => {
 
 const Download: SFC = () => {
   const { state } = useContext(Context);
-  const handler = () => download(state.dataSource);
+  const handler = () => download(state.data);
 
   return (
     <Col>
-      <Button type="primary" onClick={handler} disabled={!state.dataSource.length}>
+      <Button type="primary" onClick={handler} disabled={!state.data.length}>
         Download
       </Button>
     </Col>

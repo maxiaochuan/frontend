@@ -26,8 +26,8 @@ export const destoryHandler = async (
   id: number | string,
   klass: string,
   params: IObjectType,
-  async: () => Promise<any>,
-  cb: any,
+  async?: () => Promise<any>,
+  end?: any,
 ) => {
   try {
     await request(getApi(klass), {
@@ -45,7 +45,9 @@ export const destoryHandler = async (
       return;
     }
   } finally {
-    cb();
+    if (end && typeof end === 'function') {
+      end();
+    }
   }
 };
 

@@ -1,11 +1,9 @@
-import pluralize from '@mxcins/pluralize';
 import { IObjectType, IReactComponent } from '@mxcins/types';
 import { Form } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { createContext, Dispatch, Reducer, useEffect, useReducer } from 'react';
 import { withRouter } from 'react-router';
 
-import attachQuery from '@/decorators/attach-query';
 import { IColumnExtend, ITableProps } from './interface';
 import { cacheGenerator, columnExtendsGenerator, totalColumnsGenerator } from './utils';
 
@@ -14,7 +12,7 @@ interface IState {
   params: IObjectType;
   rowKey: string;
   cache: any[];
-  dataSource: any[];
+  data: any[];
   columns: IColumns;
   columnExtends: IObjectType<IColumnExtend>;
   searchCache: IObjectType<string>;
@@ -38,7 +36,7 @@ export const DEFAULT_TABLE_STATE: IState = {
   params: {},
   rowKey: '',
   cache: [],
-  dataSource: [],
+  data: [],
   columns: {
     current: [],
     total: [],
@@ -52,7 +50,7 @@ export const DEFAULT_TABLE_STATE: IState = {
 export const Context = createContext<{
   state: IState;
   dispatch: Dispatch<{ type: ActionType; payload: any }>;
-  refetch: () => Promise<any>;
+  refetch?: () => Promise<any>;
   form?: WrappedFormUtils;
 }>({
   state: DEFAULT_TABLE_STATE,
@@ -89,7 +87,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
       return {
         ...state,
         cache: action.payload,
-        dataSource: action.payload,
+        data: action.payload,
         columns,
         searchCache: cacheGenerator(state.rowKey, columns.current, action.payload),
         columnExtends: columnExtendsGenerator(columns.current, {}),
@@ -98,7 +96,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
       return {
         ...state,
         searchWords: action.payload,
-        dataSource: onSearch(action.payload, state.searchCache, state.cache, state.rowKey),
+        data: onSearch(action.payload, state.searchCache, state.cache, state.rowKey),
       };
     case 'COLUMNS_CURRENT':
       return {
@@ -137,7 +135,7 @@ export default function withContext(component: IReactComponent<ITableProps>) {
       params: { ...props.match.params, ...(props.params || {}) },
       rowKey: props.rowKey || DEFAULT_ROWKEY,
       cache: DEFAULT_DATA,
-      dataSource: DEFAULT_DATA,
+      data: DEFAULT_DATA,
       columns: {
         current: props.defaultColumns || [],
         default: props.defaultColumns || [],
@@ -148,9 +146,7 @@ export default function withContext(component: IReactComponent<ITableProps>) {
       searchWords: [],
     });
 
-    const dk = pluralize.plural(props.klass);
-
-    const data = props.data[dk] || DEFAULT_DATA;
+    const data = props.data || DEFAULT_DATA;
 
     useEffect(() => dispatch({ type: 'DATA', payload: data }), [data]);
 
@@ -165,5 +161,5 @@ export default function withContext(component: IReactComponent<ITableProps>) {
     );
   };
 
-  return withRouter(attachQuery(Form.create()(Component)));
+  return withRouter(Form.create()(Component));
 }

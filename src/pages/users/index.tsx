@@ -13,9 +13,10 @@ const columnExtends = {
 
 const Users: SFC<IUsers> = () => {
   return (
-    <Table
-      klass="user"
+    <Table.Query
       query={services.Users}
+      klass="user"
+      // query={services.Users}
       columnExtends={columnExtends}
       defaultColumns={['id', 'name', 'microposts']}
       controllers={true}

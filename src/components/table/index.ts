@@ -1,5 +1,10 @@
-import Table from './table';
+import Base from './table';
+
+import Query from './stores/query';
 
 export * from './interface';
-export * from './table';
+
+const Table = Base as typeof Base & { Query: typeof Query };
+Table.Query = Query;
+
 export default Table;

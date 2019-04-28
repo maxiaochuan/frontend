@@ -2,20 +2,23 @@ import { IObjectType, IRouteComponentProps, Omit } from '@mxcins/types';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/lib/table';
 
-import { AttachQueryProps } from '@/decorators';
-
 export interface ITableProps<T extends IObjectType = IObjectType>
   extends ITableCommonProps<T>,
     FormComponentProps,
-    IRouteComponentProps,
-    AttachQueryProps {}
+    IRouteComponentProps {}
 
 export interface ITableCommonProps<T extends IObjectType = IObjectType> {
   klass: string;
-  params?: IObjectType;
-  dataSource?: T[];
+  loading?: boolean;
+  data?: T[];
   defaultColumns?: string[];
   columnExtends?: { [x: string]: IColumnExtend<T> };
+
+  /**
+   * 数据相关
+   */
+  params?: IObjectType;
+  refetch?: (...args: []) => Promise<any>
 
   sortable?: boolean;
 

@@ -26,7 +26,7 @@ const Table: SFC<ITableProps> = props => {
       loading={props.loading}
       bordered={props.bordered}
       size={props.size}
-      dataSource={state.dataSource}
+      dataSource={state.data}
       title={header}
     >
       {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
@@ -39,7 +39,7 @@ const Table: SFC<ITableProps> = props => {
  * default props
  */
 Table.defaultProps = {
-  dataSource: [],
+  data: [],
 
   sortable: true,
 
