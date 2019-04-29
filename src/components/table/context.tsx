@@ -73,8 +73,8 @@ export const Context = createContext<{
 export type ActionType =
   | 'RETRIEVE_DATA'
   | 'SEARCH'
-  | 'COLUMNS_CURRENT'
-  | 'COLUMN_EXTENDS'
+  | 'CHANGE_CURRENT_COLUMNST'
+  | 'CHANGE_COLUMN_EXTENDS'
   | 'EDIT'
   | 'RESIZE'
   | 'SORT';
@@ -134,7 +134,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
       next.data = dataGenerator(next);
       return next;
     }
-    case 'COLUMNS_CURRENT': {
+    case 'CHANGE_CURRENT_COLUMNST': {
       const next = {
         ...state,
         columns: {
@@ -149,7 +149,7 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
       next.data = dataGenerator(next);
       return next;
     }
-    case 'COLUMN_EXTENDS': {
+    case 'CHANGE_COLUMN_EXTENDS': {
       return {
         ...state,
         columnExtends: columnExtendsGenerator(state.columns.current, action.payload, {
@@ -224,7 +224,7 @@ export default function withContext(component: IReactComponent<ITableProps>) {
 
     useEffect(() => dispatch({ type: 'RETRIEVE_DATA', payload: data }), [data]);
 
-    useEffect(() => dispatch({ type: 'COLUMN_EXTENDS', payload: props.columnExtends }), [
+    useEffect(() => dispatch({ type: 'CHANGE_COLUMN_EXTENDS', payload: props.columnExtends }), [
       props.columnExtends,
     ]);
 
