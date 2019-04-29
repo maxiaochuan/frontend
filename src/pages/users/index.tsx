@@ -14,11 +14,8 @@ const columnExtends = {
 const Users: SFC<IUsers> = () => {
   return (
     <Table.Query
-      withQuery={{
-        query: services.Users,
-      }}
+      query={services.Users}
       klass="user"
-      tree={{}}
       columnExtends={columnExtends}
       defaultColumns={['id', 'name']}
       controllers={true}

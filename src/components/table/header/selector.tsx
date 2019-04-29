@@ -30,7 +30,7 @@ const Selector: SFC<ISelectorProps> = props => {
 export default (props: Omit<ISelectorProps, 'selected' | 'options' | 'onChange'>) => (
   <Context.Consumer>
     {v => {
-      const onChange = (payload: any[]) => v.dispatch({ type: 'CHANGE_CURRENT_COLUMNST', payload });
+      const onChange = (payload: any[]) => v.dispatch({ type: 'CHANGE_CURRENT_COLUMNS', payload });
       return (
         <Selector
           {...props}

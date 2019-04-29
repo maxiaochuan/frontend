@@ -2,7 +2,7 @@ import { IObjectType, IRouteComponentProps, Omit } from '@mxcins/types';
 import { ColumnProps } from 'antd/lib/table';
 
 import { IWithFormResultProps } from '@/decorators';
-import { ITreeOpts } from '@/helpers';
+import { ITreeHelperOpts } from '@/helpers';
 
 export interface ITableProps<T extends IObjectType = IObjectType>
   extends ITableCommonProps<T>,
@@ -41,7 +41,7 @@ export interface ITableCommonProps<T extends IObjectType = IObjectType> {
   // pagination?: PaginationConfig | false;
   rowKey?: string;
 
-  tree?: ITreeOpts;
+  tree?: ITreeHelperOpts;
 }
 
 export interface IColumnExtend<T extends IObjectType = IObjectType>

@@ -8,8 +8,7 @@ export interface IWithQueryResultProps<D = any, V extends OperationVariables = a
 }
 
 export interface IWithQueryRequiredProps<V extends OperationVariables = any> {
-  withQuery: {
-    query: DocumentNode;
+  withQuery?: {
     queryRef?: any;
     vars?: V;
   };
@@ -19,24 +18,25 @@ export default function withQuery<
   P extends IWithQueryResultProps = IWithQueryResultProps & {},
   D = any,
   V extends OperationVariables = {}
->(
-  target: IReactComponent<P>,
-): IReactComponent<Omit<P, keyof IWithQueryResultProps> & IWithQueryRequiredProps> {
-  const Component = target;
-  return props => {
-    const {
-      withQuery: { query, vars, queryRef },
-      ...others
-    } = props;
-    return (
-      <Query<D, V> notifyOnNetworkStatusChange={true} query={query} variables={vars}>
-        {args => {
-          if (queryRef) {
-            queryRef.current = args;
-          }
-          return <Component {...others as any} queryResult={args} />;
-        }}
-      </Query>
-    );
+>(query: DocumentNode) {
+  return function target(
+    component: IReactComponent<P>,
+  ): IReactComponent<Omit<P, keyof IWithQueryResultProps> & IWithQueryRequiredProps> {
+    const Component = component;
+    return props => {
+      const { withQuery: wq = {}, ...others } = props;
+      const { vars, queryRef } = wq;
+
+      return (
+        <Query<D, V> notifyOnNetworkStatusChange={true} query={query} variables={vars}>
+          {args => {
+            if (queryRef) {
+              queryRef.current = args;
+            }
+            return <Component {...others as any} queryResult={args} />;
+          }}
+        </Query>
+      );
+    };
   };
 }

@@ -1,22 +1,37 @@
-import React from 'react';
+import { DocumentNode } from 'graphql';
+import React, { SFC, useRef } from 'react';
 
-import { IWithQueryResultProps, withQuery } from '@/decorators';
+import { IWithQueryRequiredProps, IWithQueryResultProps, withQuery } from '@/decorators';
 import { ITableCommonProps } from '../interface';
 import Table from '../table';
 
 const DEFAULT_DATA: any[] = [];
 
-export default withQuery<ITableCommonProps & IWithQueryResultProps>(props => {
-  const { queryResult, ...others } = props;
-  let data = DEFAULT_DATA;
-  if (queryResult.data) {
-    const keys = Object.keys(props.queryResult.data);
-    if (keys[0]) {
-      data = props.queryResult.data[keys[0]];
-    }
-  }
+const Query: SFC<ITableCommonProps & { query: DocumentNode } & IWithQueryRequiredProps> = props => {
+  const { query, ...others } = props;
+  const Component = useRef(
+    withQuery<ITableCommonProps & IWithQueryResultProps>(props.query)(innerProps => {
+      const { queryResult, ...innerOthers } = innerProps;
+      let data = DEFAULT_DATA;
+      if (queryResult.data) {
+        const keys = Object.keys(queryResult.data);
+        if (keys[0]) {
+          data = queryResult.data[keys[0]];
+        }
+      }
 
-  return (
-    <Table {...others} data={data} loading={queryResult.loading} refetch={queryResult.refetch} />
+      return (
+        <Table
+          {...innerOthers}
+          data={data}
+          loading={queryResult.loading}
+          refetch={queryResult.refetch}
+        />
+      );
+    }),
   );
-});
+
+  return <Component.current {...others as any} />;
+};
+
+export default Query;

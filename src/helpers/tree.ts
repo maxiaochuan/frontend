@@ -38,22 +38,22 @@ export class TreeNode<T extends IObjectType> {
   }
 }
 
-export interface ITreeOpts {
+export interface ITreeHelperOpts {
   uniqueProperty?: string;
   parentProperty?: string;
 }
 
-const DEFAULT_OPTS: Required<ITreeOpts> = {
+const DEFAULT_OPTS: Required<ITreeHelperOpts> = {
   uniqueProperty: 'id',
   parentProperty: 'parent',
 };
 
-export default class Tree<T extends IObjectType> {
+export default class TreeHelper<T extends IObjectType> {
   public nodes: IObjectType<TreeNode<T> & T> = {};
   public roots: Array<TreeNode<T> & T> = [];
-  private opts: Required<ITreeOpts> = DEFAULT_OPTS;
+  private opts: Required<ITreeHelperOpts> = DEFAULT_OPTS;
 
-  constructor(data: T[], opts: ITreeOpts = {}) {
+  constructor(data: T[], opts: ITreeHelperOpts = {}) {
     this.opts = { ...this.opts, ...opts };
     data.forEach(item => {
       const node = new TreeNode(item) as TreeNode<T> & T;

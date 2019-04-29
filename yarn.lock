@@ -1166,7 +1166,7 @@
   resolved "http://registry.npm.taobao.org/@mxcins/lodash/download/@mxcins/lodash-1.0.1.tgz#8a3d6ddddf87f9bef47750f870901074fbe50cd1"
   integrity sha1-ij1t3d+H+b70d1D4cJAQdPvlDNE=
 
-"@mxcins/pluralize@^0.1.1":
+"@mxcins/pluralize@0.1.1":
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/@mxcins/pluralize/download/@mxcins/pluralize-0.1.1.tgz#33cda883747ffbc2593d63382ad01dbe4b3563ae"
   integrity sha1-M82og3R/+8JZPWM4KtAdvks1Y64=
@@ -1329,14 +1329,14 @@
   resolved "http://registry.npm.taobao.org/@types/jest-diff/download/@types/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
   integrity sha1-NcwVucTzChjvIYUuJV/bAvbVm4k=
 
-"@types/jest@^24.0.11":
+"@types/jest@24.0.11":
   version "24.0.11"
-  resolved "http://registry.npm.taobao.org/@types/jest/download/@types/jest-24.0.11.tgz#1f099bea332c228ea6505a88159bfa86a5858340"
+  resolved "https://registry.npm.taobao.org/@types/jest/download/@types/jest-24.0.11.tgz#1f099bea332c228ea6505a88159bfa86a5858340"
   integrity sha1-Hwmb6jMsIo6mUFqIFZv6hqWFg0A=
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/lodash-es@^4.17.3":
+"@types/lodash-es@4.17.3":
   version "4.17.3"
   resolved "https://registry.npm.taobao.org/@types/lodash-es/download/@types/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
   integrity sha1-h+sLNnOwdrjuZV8YkCYKE2rwmi0=
@@ -8073,7 +8073,7 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
-lodash-es@^4.17.11, lodash-es@^4.2.1:
+lodash-es@4.17.11, lodash-es@^4.2.1:
   version "4.17.11"
   resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
   integrity sha1-FFq0p6xcXlKjUx+08xAlWhUrS+A=
@@ -8655,14 +8655,7 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
-moment-es6@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/moment-es6/download/moment-es6-1.0.0.tgz#552fcf405d62565b0a1fe84e6c1e697ac79332df"
-  integrity sha1-VS/PQF1iVlsKH+hObB5peseTMt8=
-  dependencies:
-    moment "*"
-
-moment@*, moment@2.x, moment@^2.24.0:
+moment@2.24.0, moment@2.x, moment@^2.24.0:
   version "2.24.0"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha1-DQVdU/UFKqZTyfbraLtdEr9cK1s=
