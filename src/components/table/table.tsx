@@ -15,7 +15,7 @@ const CONTROLLER_COMPONENTS = { body: { cell: BodyCell } };
 const header = () => <Header />;
 
 const Table: SFC<ITableProps> = props => {
-  const { state, dispatch } = useContext(Context);
+  const { state, dispatch, onExpand } = useContext(Context);
   const wrapper = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,6 +47,8 @@ const Table: SFC<ITableProps> = props => {
         title={header}
         scroll={state.scroll}
         onChange={handlers.current.onChange}
+        expandedRowKeys={state.expandedRowKeys}
+        onExpand={onExpand}
       >
         {state.columns.current.map(column => renderCurrent(column, state.columnExtends[column]))}
         {props.controllers ? renderController() : null}

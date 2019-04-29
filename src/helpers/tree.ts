@@ -1,15 +1,11 @@
-// tslint:disable:max-classes-per-file
-export class TreeNode<T extends { [x: string]: unknown }> {
-  public pid?: string | number;
-  public parent?: TreeNode<T>;
-  public children?: Array<TreeNode<T>>;
+import { IObjectType } from '@mxcins/types';
 
-  constructor(item: T, opts: Required<ITreeOpts>) {
-    const parent = item[opts.parentProperty];
-    this.pid =
-      parent && (parent as any)[opts.uniqueProperty]
-        ? (item[opts.parentProperty] as any)[opts.uniqueProperty]
-        : null;
+// tslint:disable:max-classes-per-file
+export class TreeNode<T extends IObjectType> {
+  public node?: TreeNode<T> & T;
+  public children?: Array<TreeNode<T> & T>;
+
+  constructor(item: T) {
     Object.keys(item).forEach(key => {
       Object.defineProperty(this, key, {
         enumerable: true,
@@ -20,17 +16,25 @@ export class TreeNode<T extends { [x: string]: unknown }> {
     });
   }
 
-  public addChild(node: TreeNode<T>) {
-    node.parent = this;
+  public addChild(node: TreeNode<T> & T) {
+    node.node = this as any;
     this.children = this.children || [];
     this.children.push(node);
   }
 
-  public getParents(): Array<TreeNode<T>> {
-    if (this.parent) {
-      return [this.parent, ...this.parent.getParents()];
+  public getParents(): Array<TreeNode<T> & T> {
+    if (this.node) {
+      return [this.node, ...this.node.getParents()];
     }
     return [];
+  }
+
+  public POT(): Array<TreeNode<T> & T> {
+    const nodes: Array<TreeNode<T> & T> = this.children
+      ? this.children.map(n => n.POT()).flat()
+      : [];
+    const node = (this as unknown) as TreeNode<T> & T;
+    return [node].concat(nodes);
   }
 }
 
@@ -44,16 +48,16 @@ const DEFAULT_OPTS: Required<ITreeOpts> = {
   parentProperty: 'parent',
 };
 
-export default class Tree<T extends { [x: string]: unknown }> {
-  public nodes: { [x: string]: TreeNode<T> & T } = {};
+export default class Tree<T extends IObjectType> {
+  public nodes: IObjectType<TreeNode<T> & T> = {};
   public roots: Array<TreeNode<T> & T> = [];
   private opts: Required<ITreeOpts> = DEFAULT_OPTS;
 
   constructor(data: T[], opts: ITreeOpts = {}) {
     this.opts = { ...this.opts, ...opts };
     data.forEach(item => {
-      const node = new TreeNode(item, this.opts) as TreeNode<T> & T;
-      if (node.pid === null) {
+      const node = new TreeNode(item) as TreeNode<T> & T;
+      if (!node[this.opts.parentProperty]) {
         this.roots.push(node);
       }
       const unique = node[this.opts.uniqueProperty] as string;
@@ -61,26 +65,29 @@ export default class Tree<T extends { [x: string]: unknown }> {
     });
 
     Object.values(this.nodes).forEach(node => {
-      if (node.pid) {
-        const parent = this.nodes[node.pid];
-        if (parent) {
-          parent.addChild(node);
-        }
+      if (node[this.opts.parentProperty]) {
+        const parent = this.nodes[node[this.opts.parentProperty][this.opts.uniqueProperty]];
+        parent.addChild(node);
       }
     });
   }
   public getParentIDs(ids: string[]) {
-    const init: { [x: string]: any } = {};
+    const init: IObjectType<true> = {};
     const ret = ids.reduce((prev, id) => {
       const node = this.nodes[id];
       if (node) {
-        const parents = this.nodes[id].getParents() as Array<TreeNode<T> & T>;
+        const parents = this.nodes[id].getParents();
         parents.forEach(parent => {
-          prev[parent.id as string] = true;
+          prev[parent.id] = true;
         });
       }
       return prev;
     }, init);
     return Object.keys(ret);
+  }
+
+  public POT(): Array<TreeNode<T> & T> {
+    const root = this.roots[0];
+    return root.POT() as Array<TreeNode<T> & T>;
   }
 }

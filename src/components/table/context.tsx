@@ -3,6 +3,7 @@ import React, { createContext, Dispatch, Reducer, SFC, useEffect, useReducer } f
 import { withRouter } from 'react-router';
 
 import { IWrappedFormUtils, withForm } from '@/decorators';
+import { ITreeOpts, Tree as TreeHelper } from '@/helpers';
 import { SorterResult } from 'antd/lib/table';
 import { IColumnExtend, ITableProps } from './interface';
 import {
@@ -12,6 +13,9 @@ import {
   totalColumnsGenerator,
 } from './utils';
 
+/**
+ * tree 2019-04-29 12:22:03
+ */
 interface IState {
   klass: string;
   params: IObjectType;
@@ -30,6 +34,10 @@ interface IState {
 
   sortable?: boolean;
   sorter?: SorterResult<any>;
+
+  tree?: ITreeOpts;
+  helper?: TreeHelper<IObjectType>;
+  expandedRowKeys?: string[];
 }
 
 interface IAction {
@@ -64,6 +72,7 @@ export const Context = createContext<{
   dispatch: Dispatch<{ type: ActionType; payload: any }>;
   refetch?: () => Promise<any>;
   form?: IWrappedFormUtils;
+  onExpand?: (...args: any[]) => void;
 }>({
   state: DEFAULT_TABLE_STATE,
   dispatch: () => undefined,
@@ -77,9 +86,21 @@ export type ActionType =
   | 'CHANGE_COLUMN_EXTENDS'
   | 'EDIT'
   | 'RESIZE'
-  | 'SORT';
+  | 'SORT'
+  | 'EXPANDED';
 
-const dataGenerator = ({ cache, searchCache, searchWords, rowKey, sorter }: IState) => {
+const dataGenerator = ({
+  cache,
+  searchCache,
+  searchWords,
+  rowKey,
+  sorter,
+  tree,
+  helper,
+}: IState) => {
+  if (tree && helper) {
+    return helper.roots;
+  }
   let result = [...cache];
   if (searchWords.length) {
     const init: IObjectType = {};
@@ -123,15 +144,30 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
         }),
       };
 
+      if (state.tree) {
+        const helper = new TreeHelper(next.cache, state.tree);
+        next.helper = helper;
+      }
+
       next.data = dataGenerator(next);
       return next;
     }
     case 'SEARCH': {
+      const searchWords = action.payload as string[];
       const next = {
         ...state,
-        searchWords: action.payload,
+        searchWords,
       };
       next.data = dataGenerator(next);
+      if (state.tree && state.helper) {
+        const init: IObjectType = {};
+        const keys = Object.keys(state.searchCache)
+          .filter(key => searchWords.some(input => state.searchCache[key].includes(input)))
+          .reduce((prev, key) => (prev[key] = true) && prev, init);
+        const IDs = state.helper.getParentIDs(Object.keys(keys));
+        next.expandedRowKeys = [...new Set((state.expandedRowKeys || []).concat(IDs))];
+      }
+
       return next;
     }
     case 'CHANGE_CURRENT_COLUMNST': {
@@ -190,6 +226,22 @@ export const reducer: Reducer<IState, IAction> = (state, action) => {
       next.data = dataGenerator(next);
       return next;
     }
+    case 'EXPANDED': {
+      const { expanded, record } = action.payload;
+      const key = record[state.rowKey];
+      const expandedRowKeys = state.expandedRowKeys || [];
+      if (expanded) {
+        expandedRowKeys.push(key);
+      } else {
+        const index = expandedRowKeys.indexOf(key);
+        expandedRowKeys.splice(index, 1);
+      }
+      const next = {
+        ...state,
+        expandedRowKeys,
+      };
+      return next;
+    }
     default:
       return state;
   }
@@ -218,6 +270,9 @@ export default function withContext(component: IReactComponent<ITableProps>) {
       searchWords: [],
 
       sortable: props.sortable,
+
+      tree: props.tree,
+      expandedRowKeys: [],
     });
 
     const data = props.data || DEFAULT_DATA;
@@ -235,6 +290,8 @@ export default function withContext(component: IReactComponent<ITableProps>) {
           dispatch,
           form: props.form,
           refetch: props.refetch,
+          onExpand: (expanded: boolean, record: any) =>
+            dispatch({ type: 'EXPANDED', payload: { expanded, record } }),
         }}
       >
         <Comp {...props} />

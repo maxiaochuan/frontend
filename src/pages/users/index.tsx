@@ -18,9 +18,9 @@ const Users: SFC<IUsers> = () => {
         query: services.Users,
       }}
       klass="user"
-      // query={services.Users}
+      tree={{}}
       columnExtends={columnExtends}
-      defaultColumns={['id', 'name', 'email', 'microposts']}
+      defaultColumns={['id', 'name']}
       controllers={true}
     />
   );
