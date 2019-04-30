@@ -11,10 +11,14 @@ const columnExtends = {
   name: { editing: true },
 };
 
+const WITH_QUERY = {
+  query: services.Users
+}
+
 const Users: SFC<IUsers> = () => {
   return (
     <Table.Query
-      query={services.Users}
+      withQuery={WITH_QUERY}
       klass="user"
       columnExtends={columnExtends}
       defaultColumns={['id', 'name']}
