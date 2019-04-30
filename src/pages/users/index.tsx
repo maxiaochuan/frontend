@@ -3,6 +3,8 @@ import React, { SFC } from 'react';
 
 import { Table } from '@/components';
 
+import { withQuery } from '@/decorators';
+import { GQLUser } from '@/graphql/generated';
 import * as services from './services.gql';
 
 export interface IUsers extends IRouteComponentProps<IObjectType> {}
@@ -11,20 +13,18 @@ const columnExtends = {
   name: { editing: true },
 };
 
-const WITH_QUERY = {
-  query: services.Users
-}
+const USERS_DEFAULT_COLUMNS: Array<keyof GQLUser> = ['id', 'name'];
+const Users = withQuery(services.Users)(Table.Query);
 
-const Users: SFC<IUsers> = () => {
+const Side: SFC<IUsers> = () => {
   return (
-    <Table.Query
-      withQuery={WITH_QUERY}
+    <Users
       klass="user"
       columnExtends={columnExtends}
-      defaultColumns={['id', 'name']}
+      defaultColumns={USERS_DEFAULT_COLUMNS}
       controllers={true}
     />
   );
 };
 
-export default Users;
+export default Side;

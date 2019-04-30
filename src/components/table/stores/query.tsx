@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { SFC } from 'react';
 
-import { IWithQueryResultProps, withQuery } from '@/decorators';
+import { IWithQueryResultProps } from '@/decorators';
 import { ITableCommonProps } from '../interface';
 import Table from '../table';
 
 const DEFAULT_DATA: any[] = [];
 
-const Query = withQuery<ITableCommonProps & IWithQueryResultProps>()(props => {
+const Query: SFC<ITableCommonProps & IWithQueryResultProps> = props => {
   const { queryResult, ...others } = props;
   let data = DEFAULT_DATA;
   if (queryResult.data) {
@@ -18,7 +18,7 @@ const Query = withQuery<ITableCommonProps & IWithQueryResultProps>()(props => {
   return (
     <Table {...others} data={data} loading={queryResult.loading} refetch={queryResult.refetch} />
   );
-});
+};
 
 // const Query: SFC<ITableCommonProps & { query: DocumentNode } & IWithQueryRequiredProps> = props => {
 //   const { query, ...others } = props;
