@@ -12728,10 +12728,10 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-stylelint-config-mxcins@1.0.0-rc.2:
-  version "1.0.0-rc.2"
-  resolved "http://registry.npm.taobao.org/stylelint-config-mxcins/download/stylelint-config-mxcins-1.0.0-rc.2.tgz#3a11a0b803732dc1a5d7a557153b5bc3d34fb108"
-  integrity sha1-OhGguANzLcGl16VXFTtbw9NPsQg=
+stylelint-config-mxcins@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/stylelint-config-mxcins/download/stylelint-config-mxcins-1.0.0.tgz#dff3edfa704df19f0b9cde4d035f317b848049b5"
+  integrity sha1-3/Pt+nBN8Z8LnN5NA18xe4SASbU=
   dependencies:
     stylelint-config-prettier "5.0.0"
     stylelint-config-rational-order "0.0.4"
@@ -13215,10 +13215,10 @@ tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "http://registry.npm.taobao.org/tslib/download/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha1-1+TdeSRdhUKMTX5IIqeZF5VMooY=
 
-tslint-config-mxcins@1.0.0-rc.1:
-  version "1.0.0-rc.1"
-  resolved "http://registry.npm.taobao.org/tslint-config-mxcins/download/tslint-config-mxcins-1.0.0-rc.1.tgz#dda6a28859cb4e75c6b5dfb50f3472cf587874f7"
-  integrity sha1-3aaiiFnLTnXGtd+1DzRyz1h4dPc=
+tslint-config-mxcins@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/tslint-config-mxcins/download/tslint-config-mxcins-1.0.0.tgz#e134aad1ca7c322ae20942f5b9bc0abc810a2bce"
+  integrity sha1-4TSq0cp8MiriCUL1ubwKvIEKK84=
   dependencies:
     tslint-config-prettier "1.10.0"
     tslint-react "3.6.0"

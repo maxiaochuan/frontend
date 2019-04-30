@@ -70,9 +70,9 @@
     "lint-staged": "8.1.5",
     "prettier": "1.17.0",
     "stylelint": "9.x",
-    "stylelint-config-mxcins": "1.0.0-rc.2",
+    "stylelint-config-mxcins": "1.0.0",
     "tslint": "5.16.0",
-    "tslint-config-mxcins": "1.0.0-rc.1",
+    "tslint-config-mxcins": "1.0.0",
     "typescript": "3.4.3"
   },
   "resolutions": {

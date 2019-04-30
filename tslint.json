@@ -1,9 +1,5 @@
 {
   "extends": ["tslint-config-mxcins"],
-  "rules": {
-    "no-implicit-dependencies": false,
-    "no-submodule-imports": false
-  },
   "linterOptions": {
     "exclude": [
       "node_modules"
