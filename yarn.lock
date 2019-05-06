@@ -10971,6 +10971,13 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-apollo-hooks@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.npm.taobao.org/react-apollo-hooks/download/react-apollo-hooks-0.4.5.tgz#7fe6a8ddfdc92df2da664d399ea77a0da4a10bad"
+  integrity sha1-f+ao3f3JLfLaZk05nqd6DaShC60=
+  dependencies:
+    lodash "^4.17.11"
+
 react-apollo@2.5.4:
   version "2.5.4"
   resolved "http://registry.npm.taobao.org/react-apollo/download/react-apollo-2.5.4.tgz#4b5ad2e9e38001521d072445acdb5b3b5489b22d"

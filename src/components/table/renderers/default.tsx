@@ -43,6 +43,7 @@ const HashRender: SFC<IHashRenderProps> = props => {
       : has(text, 'content')
       ? (text as IObjectType).content
       : '';
+
     return <HighlightRender {...others} text={t} />;
   }
   return <HighlightRender {...others} text={JSON.stringify(text)} />;
@@ -92,11 +93,7 @@ const DefaultRenderer: SFC<IDefaultRendererProps> = props => {
   if (Array.isArray(text)) {
     return <ArrayRender {...others} text={text} />;
   }
-  if (typeof text !== 'string') {
-    return null;
-  }
-
-  return <HighlightRender {...others} text={text} />;
+  return <SingularRender {...others} text={text} />;
 };
 
 export default DefaultRenderer;

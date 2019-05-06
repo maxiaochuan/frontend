@@ -2,7 +2,7 @@ import { IObjectType, IRouteComponentProps } from '@mxcins/types';
 import React, { SFC } from 'react';
 
 import { Table } from '@/components';
-
+import { ITableCommonProps } from '@/components/table';
 import { withQuery } from '@/decorators';
 import { GQLUser } from '@/graphql/generated';
 import * as services from './services.gql';
@@ -14,17 +14,16 @@ const columnExtends = {
 };
 
 const USERS_DEFAULT_COLUMNS: Array<keyof GQLUser> = ['id', 'name'];
-const Users = withQuery(services.Users)(Table.Query);
+
+const Users = withQuery<ITableCommonProps>(services.Users, {
+  klass: 'user',
+  columnExtends,
+  defaultColumns: USERS_DEFAULT_COLUMNS,
+  controllers: true,
+})(Table.Query);
 
 const Side: SFC<IUsers> = () => {
-  return (
-    <Users
-      klass="user"
-      columnExtends={columnExtends}
-      defaultColumns={USERS_DEFAULT_COLUMNS}
-      controllers={true}
-    />
-  );
+  return <Users />;
 };
 
 export default Side;

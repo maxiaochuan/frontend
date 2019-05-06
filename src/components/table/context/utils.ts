@@ -78,13 +78,13 @@ export const columnExtendsGenerator: CEGOR = (
       sorter: sortable,
       ...columnExtend,
       ...addedColumnExtend,
-      onCell: (item, index) => ({
-        editing: columnExtend.editing,
-        dataIndex: key,
-        item,
-        index,
-      }),
     };
+    prev[key].onCell = (item, index) => ({
+      editing: prev[key].editing,
+      dataIndex: key,
+      item,
+      index,
+    });
     return prev;
   }, columnExtends);
 };

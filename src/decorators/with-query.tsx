@@ -1,41 +1,44 @@
-import { IReactComponent, Omit } from '@mxcins/types';
+import { IObjectType, IReactComponent, Omit } from '@mxcins/types';
 import { DocumentNode } from 'graphql';
-import React, { RefObject } from 'react';
-import { OperationVariables, Query, QueryResult } from 'react-apollo';
+import React, { MutableRefObject, SFC } from 'react';
+import { OperationVariables } from 'react-apollo';
+import { QueryHookOptions, QueryHookResult, useQuery } from 'react-apollo-hooks';
+import { withRouter } from 'react-router';
 
-export interface IWithQueryResultProps<D = any, V extends OperationVariables = any> {
-  queryResult: QueryResult<D, V>;
+export interface IWithQueryResultProps<TD = any, TV extends OperationVariables = IObjectType> {
+  queryResult: QueryHookResult<TD, TV>;
 }
 
-export interface IWithQueryRequiredProps<D = any, V extends OperationVariables = any> {
+export interface IWithQueryRequiredProps<TD = any, TV extends OperationVariables = IObjectType> {
   withQuery?: {
-    queryRef?: RefObject<QueryResult<D, V>>;
-    vars?: V;
-  };
+    queryRef?: MutableRefObject<QueryHookResult<TD, TV> | null | undefined>;
+  } & QueryHookOptions<TV, object>;
 }
 
-/**
- * 2019-04-30 14:57:00 定版 v1.0
- * query 绝大多数情况下可以确定而且不需要变化，vars 会随各种情况变化
- * @param query
- */
-export default function withQuery<D = any, V extends OperationVariables = {}>(query: DocumentNode) {
-  return function target<P extends IWithQueryResultProps<D, V>>(
+export default function withQuery<
+  INIT extends IObjectType = IObjectType,
+  TD = any,
+  TV extends OperationVariables = IObjectType
+>(document: DocumentNode, init?: INIT) {
+  return function target<P extends IWithQueryResultProps<TD, TV> & INIT>(
     component: IReactComponent<P>,
-  ): IReactComponent<Omit<P, keyof IWithQueryResultProps> & IWithQueryRequiredProps<D, V>> {
-    const Component = component;
-    return props => {
-      const { withQuery: wq = {}, ...others } = props;
-      return (
-        <Query<D, V> notifyOnNetworkStatusChange={true} query={query} variables={wq.vars as any}>
-          {args => {
-            if (wq.queryRef && Object.prototype.hasOwnProperty('current')) {
-              (wq.queryRef as any).current = args;
-            }
-            return <Component {...others as any} queryResult={args} />;
-          }}
-        </Query>
-      );
+  ): IReactComponent<
+    Omit<P, keyof IWithQueryResultProps<TD, TV> | keyof INIT> &
+      Partial<INIT> &
+      IWithQueryRequiredProps<TD, TV>
+  > {
+    const Target = component;
+    const Base: SFC<any> = props => {
+      const { withQuery: wq = {}, match, ...others } = props;
+      const variables = { ...match.params, ...wq.variables };
+      const queryResult = useQuery(document, {
+        notifyOnNetworkStatusChange: true,
+        ...wq,
+        variables,
+      });
+      return <Target {...init} {...others} queryResult={queryResult} />;
     };
+
+    return withRouter(Base);
   };
 }

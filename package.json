@@ -55,6 +55,7 @@
     "moment": "2.24.0",
     "react": "16.8.3",
     "react-apollo": "2.5.4",
+    "react-apollo-hooks": "^0.4.5",
     "react-dom": "16.8.3",
     "react-highlight-words": "0.16.0",
     "umi": "2.6.13",

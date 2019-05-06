@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import React, { SFC } from 'react';
 import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 
 const client = new ApolloClient({
   link: new HttpLink(),
@@ -13,7 +14,11 @@ const client = new ApolloClient({
 });
 
 const Layout: SFC<IRouteComponentProps> = props => {
-  return <ApolloProvider client={client}>{props.children}</ApolloProvider>;
+  return (
+    <ApolloProvider client={client}>
+      <ApolloHooksProvider client={client}>{props.children}</ApolloHooksProvider>
+    </ApolloProvider>
+  );
 };
 
 export default Layout;

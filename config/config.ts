@@ -1,6 +1,8 @@
 import { IConfig } from '@mxcins/types';
+import routes from './routes.config';
 
 const config: IConfig = {
+  routes,
   hash: true,
   ignoreMomentLocale: true,
   targets: {
