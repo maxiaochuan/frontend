@@ -2,7 +2,7 @@ import React, { SFC } from 'react';
 
 import { IWithQueryResultProps } from '@/decorators';
 import { ITableCommonProps } from '../interface';
-import Table from '../table';
+import Table from '../Table';
 
 const DEFAULT_DATA: any[] = [];
 

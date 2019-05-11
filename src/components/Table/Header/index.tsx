@@ -4,8 +4,8 @@ import React, { SFC, useContext } from 'react';
 import { Context } from '../context';
 import styles from '../style.less';
 import { download } from '../utils';
-import Search from './search';
-import Selector from './selector';
+import Search from './Search';
+import Selector from './Selector';
 
 const Percent: SFC = () => {
   const {

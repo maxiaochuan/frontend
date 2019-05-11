@@ -14,7 +14,7 @@ import React, {
 } from 'react';
 import withRouter from 'umi/withRouter';
 
-import Item, { IFormItemProps } from './item';
+import Item, { IFormItemProps } from './Item';
 
 type Items = Array<ReactElement<IFormItemProps | null>> | ReactElement<IFormItemProps> | null;
 

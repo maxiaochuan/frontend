@@ -6,7 +6,7 @@ import { SorterResult } from 'antd/lib/table';
 import { BodyCell } from './cells';
 import { renderController, renderCurrent } from './columns';
 import withContext, { Context } from './context';
-import Header from './header';
+import Header from './Header';
 import { ITableProps } from './interface';
 import styles from './style.less';
 

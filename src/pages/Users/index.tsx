@@ -1,8 +1,7 @@
 import { IObjectType, IRouteComponentProps } from '@mxcins/types';
 import React, { SFC } from 'react';
 
-import { Table } from '@/components';
-import { ITableCommonProps } from '@/components/table';
+import { ITableCommonProps, Table } from '@/components';
 import { withQuery } from '@/decorators';
 import { GQLUser } from '@/graphql/generated';
 import * as services from './services.gql';

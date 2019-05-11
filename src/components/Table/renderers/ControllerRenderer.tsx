@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 
 import { Anchor } from '@/components';
 import { Context } from '../context';
-import { IDefaultRendererProps } from './default';
+import { IDefaultRendererProps } from './DefaultRenderer';
 
 export interface IControllerRendererProps<T extends IObjectType = IObjectType>
   extends IDefaultRendererProps<T>,

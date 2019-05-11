@@ -1,4 +1,4 @@
-import Base from './table';
+import Base from './Table';
 
 import Query from './stores/query';
 
