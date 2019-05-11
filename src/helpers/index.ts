@@ -1,2 +1,2 @@
-export * from './tree';
-export { default as TreeHelper } from './tree';
+export * from './TreeHelper';
+export { default as TreeHelper } from './TreeHelper';
