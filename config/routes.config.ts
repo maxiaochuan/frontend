@@ -9,6 +9,16 @@ const routes: IRoute[] = [
         path: '/users',
         component: './Users',
       },
+      {
+        path: '/account',
+        component: '../layouts/AccountLayout',
+        routes: [
+          {
+            path: '/account/join',
+            component: './Account/SignUp',
+          },
+        ],
+      },
     ],
   },
 ];
