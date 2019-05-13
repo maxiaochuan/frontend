@@ -1,3 +1,5 @@
+export * from './FormattedMessage';
+export { default as FormattedMessage } from './FormattedMessage';
 export { default as Anchor } from './Anchor';
 
 export * from './Table';

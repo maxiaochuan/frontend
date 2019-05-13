@@ -15,6 +15,7 @@ const config: IConfig = {
         antd: true,
         locale: {
           default: 'zh-CN',
+          baseNavigator: false,
         },
         dynamicImport: {},
         // dll: {},

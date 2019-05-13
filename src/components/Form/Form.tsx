@@ -2,7 +2,7 @@ import request from '@mxcins/request';
 import { IRouteComponentProps } from '@mxcins/types';
 import { Button, Form as BasicForm, message } from 'antd';
 import { FormComponentProps, FormProps } from 'antd/lib/form';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormCreateOption, WrappedFormUtils } from 'antd/lib/form/Form';
 import React, {
   Children,
   cloneElement,
@@ -19,6 +19,7 @@ import Item, { IFormItemProps } from './Item';
 type Items = Array<ReactElement<IFormItemProps | null>> | ReactElement<IFormItemProps> | null;
 
 export interface IFormProps extends FormProps {
+  klass: string;
   children?: Items;
   action?: any;
   fetch?: string;
@@ -35,10 +36,10 @@ export interface IFormHandlers {
   submit: FormEventHandler<any>;
 }
 
-const itemsRender = (props: IFormProps & FormComponentProps) => {
+const renderItems = (props: IFormProps & FormComponentProps) => {
   return Children.map(props.children || [], item => {
     if (isValidElement(item)) {
-      return cloneElement(item, { form: props.form });
+      return cloneElement(item, { form: props.form, klass: props.klass });
     }
     return null;
   });
@@ -65,7 +66,7 @@ class Base extends Component<
   public render() {
     return (
       <BasicForm onSubmit={this.onSubmit} layout="horizontal">
-        {itemsRender(this.props)}
+        {renderItems(this.props)}
         <BasicForm.Item wrapperCol={{ offset: 4, span: 14 }}>
           <Button htmlType="submit" type="primary" style={{ width: '100%' }}>
             Submit
@@ -82,7 +83,6 @@ class Base extends Component<
       form.validateFields((e, v) => resolve([e, v]));
     });
     if (errors) {
-      message.error(JSON.stringify(errors));
       return;
     }
     if (!action) {
@@ -113,21 +113,20 @@ class Base extends Component<
   };
 }
 
-const WrappedBase = withRouter(
-  BasicForm.create<IFormProps>({
-    onValuesChange(props, values) {
-      if (props.onValuesChange) {
-        props.onValuesChange(values);
+const options: FormCreateOption<IFormProps> = {
+  onValuesChange(props, values) {
+    if (props.onValuesChange) {
+      props.onValuesChange(values);
+    } else if (props.onValueChange) {
+      const keys = Object.keys(values);
+      if (keys.length && keys.length === 1) {
+        props.onValueChange(keys[0], values[keys[0]]);
       }
-      if (props.onValueChange) {
-        const keys = Object.keys(values);
-        if (keys.length && keys.length === 1) {
-          props.onValueChange(keys[0], values[keys[0]]);
-        }
-      }
-    },
-  })(Base),
-);
+    }
+  },
+};
+
+const WrappedBase = withRouter(BasicForm.create<IFormProps>(options)(Base));
 
 interface IFormSFC extends SFC<IFormProps> {
   _VITAL_FORM: boolean;

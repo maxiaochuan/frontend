@@ -25,7 +25,7 @@ export interface IUserProps
 
 const User: SFC<IUserProps> = props => {
   return (
-    <Form action={props.action} onValuesChange={props.onVariablesChange}>
+    <Form klass="user" action={props.action} onValuesChange={props.onVariablesChange}>
       <Form.Item name="name" component={Input} />
       <Form.Item name="email" component={Input} />
     </Form>

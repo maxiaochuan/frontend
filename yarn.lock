@@ -1382,6 +1382,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-intl@^2.3.17":
+  version "2.3.17"
+  resolved "https://registry.npm.taobao.org/@types/react-intl/download/@types/react-intl-2.3.17.tgz#e1fc6e46e8af58bdef9531259d509380a8a99e8e"
+  integrity sha1-4fxuRuivWL3vlTElnVCTgKipno4=
+
 "@types/react-router-dom@4.x", "@types/react-router-dom@^4.2.7":
   version "4.3.2"
   resolved "http://registry.npm.taobao.org/@types/react-router-dom/download/@types/react-router-dom-4.3.2.tgz#52c17c3682597638f31c17c42620403dc5c2a3f5"
