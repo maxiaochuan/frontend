@@ -1,6 +1,0 @@
-query UserMicroposts($id: ID) {
-  microposts(userId: $id) {
-    id
-    content
-  }
-}

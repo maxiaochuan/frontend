@@ -3,11 +3,11 @@ import { IRoute } from '@mxcins/types';
 const routes: IRoute[] = [
   {
     path: '/',
-    component: '../layouts/index',
+    component: '../layouts/BaseLayout',
     routes: [
       {
-        path: '/test/users/:id',
-        component: './test/table',
+        path: '/users',
+        component: './Users',
       },
     ],
   },
