@@ -1,42 +1,21 @@
-import request from '@mxcins/request';
-import { IRouteComponentProps } from '@mxcins/types';
-import { Button, Form as BasicForm, message } from 'antd';
-import { FormComponentProps, FormProps } from 'antd/lib/form';
+import { Form as Base } from 'antd';
 import { FormCreateOption, WrappedFormUtils } from 'antd/lib/form/Form';
 import React, {
   Children,
   cloneElement,
-  Component,
   FormEventHandler,
   isValidElement,
-  ReactElement,
   SFC,
+  useCallback,
+  useImperativeHandle,
+  useRef,
 } from 'react';
-import withRouter from 'umi/withRouter';
 
-import Item, { IFormItemProps } from './Item';
+import { handleSubmit } from './handlers';
+import { IFormProps, IFormViewProps } from './interface';
+import Item from './Item';
 
-type Items = Array<ReactElement<IFormItemProps | null>> | ReactElement<IFormItemProps> | null;
-
-export interface IFormProps extends FormProps {
-  klass: string;
-  children?: Items;
-  action?: any;
-  fetch?: string;
-  onSuccess?: () => void;
-  onValueChange?: (key: string, value: any) => void;
-  onValuesChange?: (values: any) => void;
-  formRef?: {
-    current?: WrappedFormUtils | null;
-  };
-  params?: { [x: string]: any };
-}
-
-export interface IFormHandlers {
-  submit: FormEventHandler<any>;
-}
-
-const renderItems = (props: IFormProps & FormComponentProps) => {
+const renderItems = (props: IFormViewProps) => {
   return Children.map(props.children || [], item => {
     if (isValidElement(item)) {
       return cloneElement(item, { form: props.form, klass: props.klass });
@@ -45,72 +24,16 @@ const renderItems = (props: IFormProps & FormComponentProps) => {
   });
 };
 
-class Base extends Component<
-  IFormProps & FormComponentProps & IRouteComponentProps<{ id?: string }>
-> {
-  public componentDidMount() {
-    const props = this.props;
-    if (props.match.params.id && props.fetch) {
-      request(props.fetch, {
-        params: { ...props.match.params, ...(props.params || {}) },
-      }).then(values => {
-        props.form.setFieldsValue(values);
-      });
-    }
-    if (props.formRef) {
-      if (typeof props.formRef === 'object') {
-        props.formRef.current = props.form;
-      }
-    }
-  }
-  public render() {
-    return (
-      <BasicForm onSubmit={this.onSubmit} layout="horizontal">
-        {renderItems(this.props)}
-        <BasicForm.Item wrapperCol={{ offset: 4, span: 14 }}>
-          <Button htmlType="submit" type="primary" style={{ width: '100%' }}>
-            Submit
-          </Button>
-        </BasicForm.Item>
-      </BasicForm>
-    );
-  }
+const FormView: SFC<IFormViewProps> = props => {
+  const { formRef, form } = props;
 
-  private onSubmit: FormEventHandler<any> = async event => {
-    const { form, action, match, params: p = {}, onSuccess } = this.props;
-    event.preventDefault();
-    const [errors, values] = await new Promise(resolve => {
-      form.validateFields((e, v) => resolve([e, v]));
-    });
-    if (errors) {
-      return;
-    }
-    if (!action) {
-      message.error('action');
-      return;
-    }
-    const params = { ...match.params, ...p };
-    try {
-      if (typeof action === 'function') {
-        await action();
-      } else {
-        const resp = await request(action, {
-          data: values,
-          method: params.id ? 'PATCH' : 'POST',
-          params,
-        });
-        message.success(JSON.stringify(resp));
-      }
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (error) {
-      if (error && error.response) {
-        message.error(JSON.stringify(error.data));
-        return;
-      }
-    }
-  };
+  useImperativeHandle(formRef, () => form);
+
+  return <Base onSubmit={props.onSubmit}>{renderItems(props)}</Base>;
+};
+
+interface IForm extends SFC<IFormProps> {
+  Item: typeof Item;
 }
 
 const options: FormCreateOption<IFormProps> = {
@@ -126,15 +49,100 @@ const options: FormCreateOption<IFormProps> = {
   },
 };
 
-const WrappedBase = withRouter(BasicForm.create<IFormProps>(options)(Base));
+const Form: IForm = props => {
+  const component = useRef(Base.create(options)(FormView));
+  const formRef = useRef<WrappedFormUtils>();
 
-interface IFormSFC extends SFC<IFormProps> {
-  _VITAL_FORM: boolean;
-  Item: typeof Item;
-}
+  const onSubmit: FormEventHandler = useCallback(
+    e => formRef.current && handleSubmit(e, formRef.current, props),
+    [props.onSubmit, props.onSuccess, props.onError],
+  );
 
-const Form: IFormSFC = props => <WrappedBase {...props} />;
-Form._VITAL_FORM = true;
+  return <component.current formRef={formRef} {...props} onSubmit={onSubmit} />;
+};
+
 Form.Item = Item;
 
 export default Form;
+// import { IObjectType } from '@mxcins/types';
+// import { Button, Form as Base, message } from 'antd';
+// import { FormCreateOption } from 'antd/lib/form';
+// import { WrappedFormUtils } from 'antd/lib/form/Form';
+// import React, { Children, cloneElement, FormEvent, FormEventHandler, isValidElement, SFC, useImperativeHandle } from 'react';
+
+// import { formatMessage, FormattedMessage } from '@/components';
+// import { IFormProps } from './interface';
+// import Item from './Item';
+
+// const validate = async (form: WrappedFormUtils) => new Promise<[IObjectType, IObjectType]>(resolve => form.validateFields((errors, values) => resolve([errors, values])))
+
+// const handleError = (_: Error) => {
+//   // TODO ;
+//   return;
+// }
+
+// const handleSuccess = (_: any) => {
+//   message.success(formatMessage({ id: 'form.submit.success' }))
+//   return;
+// }
+
+// const handleSubmit = async (e: FormEvent, props: IFormProps) => {
+//   e.preventDefault();
+//   const [errors, values] = await validate(props.form);
+//   if (errors) {
+//     message.error(JSON.stringify(errors));
+//     return;
+//   }
+
+//   if (!props.onSubmit) {
+//     return;
+//   }
+//   const { onSuccess, onError } = props;
+
+//   try {
+//     const resp = await props.onSubmit(values);
+//     if (onSuccess) {
+//       return onSuccess(resp);
+//     }
+//   } catch (error) {
+//     if (onError) {
+//       return onError(error);
+//     }
+//   }
+// };
+// const hasErrors = (fieldsError: IObjectType) => Object.keys(fieldsError).some(field => fieldsError[field]);
+
+// const Form: SFC<IFormProps> = props => {
+//   const { formRef } = props;
+//   const { getFieldsError } = props.form;
+
+//   const disabled = hasErrors(getFieldsError());
+
+//   useImperativeHandle(formRef, () => props.form);
+
+//   const onSubmit: FormEventHandler = e => handleSubmit(e, props);
+
+//   return (
+//     <Base onSubmit={onSubmit}>
+//       {renderItems(props)}
+//       <Base.Item wrapperCol={{ offset: 4, span: 14 }}>
+//         <Button htmlType="submit" type="primary" style={{ width: '100%' }} disabled={disabled}>
+//           <FormattedMessage id="form.submit" />
+//         </Button>
+//       </Base.Item>
+//     </Base>
+//   )
+// }
+
+
+// const WrappedForm = Base.create<IFormProps>(options)(Form);
+
+// WrappedForm.defaultProps = {
+//   onSuccess: handleSuccess,
+//   onError: handleError,
+// }
+
+// const Exported = WrappedForm as typeof WrappedForm & { Item: typeof Item };
+// Exported.Item = Item;
+
+// export default Exported;

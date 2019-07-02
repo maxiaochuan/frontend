@@ -3,7 +3,7 @@ import { Col, Input, Row } from 'antd';
 import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import React, { SFC } from 'react';
 
-import { Form, formatMessage, FormattedMessage } from '@/components';
+import { Form, FormattedMessage } from '@/components';
 
 export interface ISignUpProps extends IRouteComponentProps {
   one?: any;
@@ -19,7 +19,7 @@ const FORM_ITEM_LAYOUT = {
 };
 
 const SIGNUP_FORM_NAME_DECORATORS: GetFieldDecoratorOptions = {
-  rules: [{ required: true, type: 'string', max: 50, min: 6 }],
+  rules: [{ required: true, type: 'string', max: 50 }],
 };
 
 const SIGNUP_FORM_EMAL_DECORATORS: GetFieldDecoratorOptions = {
@@ -27,9 +27,6 @@ const SIGNUP_FORM_EMAL_DECORATORS: GetFieldDecoratorOptions = {
     {
       required: true,
       type: 'email',
-      message: formatMessage({
-        id: 'user.email.validate',
-      }),
     },
   ],
 };
@@ -41,7 +38,7 @@ const SignUp: SFC<ISignUpProps> = () => {
         <h1 style={{ textAlign: 'center' }}>
           <FormattedMessage id="page.account.signup.title" />
         </h1>
-        <Form klass="user">
+        <Form.Rest klass="user" mode="create">
           <Form.Item
             name="name"
             component={Input}
@@ -57,9 +54,9 @@ const SignUp: SFC<ISignUpProps> = () => {
             <Input type="password" autoComplete="new-password" />
           </Form.Item>
           <Form.Item name="password_confirmation" {...FORM_ITEM_LAYOUT}>
-            <Input type="password_confirmation" autoComplete="new-password" />
+            <Input type="password" autoComplete="new-password" />
           </Form.Item>
-        </Form>
+        </Form.Rest>
       </Col>
     </Row>
   );

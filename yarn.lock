@@ -1171,10 +1171,10 @@
   resolved "https://registry.npm.taobao.org/@mxcins/pluralize/download/@mxcins/pluralize-0.1.1.tgz#33cda883747ffbc2593d63382ad01dbe4b3563ae"
   integrity sha1-M82og3R/+8JZPWM4KtAdvks1Y64=
 
-"@mxcins/request@1.3.1":
-  version "1.3.1"
-  resolved "http://registry.npm.taobao.org/@mxcins/request/download/@mxcins/request-1.3.1.tgz#a4496ed6053c43ef0fbaffc80cb9783f0462fffb"
-  integrity sha1-pElu1gU8Q+8Puv/IDLl4PwRi//s=
+"@mxcins/request@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/@mxcins/request/download/@mxcins/request-1.4.0.tgz#66809298d449850753de0c0212148a3179bb87b3"
+  integrity sha1-ZoCSmNRJhQdT3gwCEhSKMXm7h7M=
   dependencies:
     "@babel/runtime" "7.3.4"
     query-string "6.2.0"

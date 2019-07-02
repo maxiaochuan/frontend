@@ -1,17 +1,8 @@
 import { Form as BasicForm } from 'antd';
-import { FormComponentProps, FormItemProps } from 'antd/lib/form';
-import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
-import React, { Children, ComponentClass, isValidElement, ReactNode, SFC } from 'react';
+import React, { Children, isValidElement, SFC } from 'react';
 import { formatMessage, FormattedMessage } from '..';
 
-export interface IFormItemProps extends FormItemProps, Partial<FormComponentProps> {
-  name: string;
-  klass?: string;
-  decorators?: GetFieldDecoratorOptions;
-  component?: ComponentClass;
-  locale?: string;
-  label?: ReactNode;
-}
+import { IFormItemProps } from './interface';
 
 const Item: SFC<IFormItemProps> = props => {
   const {

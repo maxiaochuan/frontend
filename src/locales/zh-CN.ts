@@ -1,6 +1,8 @@
 const locale = {
   'page.account.signup.title': '注册',
 
+  'form.submit': '提交',
+
   'user.name': '用户名',
   'user.name.validate': '用户名不可为空，且最多50个字符',
   'user.email': '邮箱地址',
