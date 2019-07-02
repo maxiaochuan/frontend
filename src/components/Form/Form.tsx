@@ -55,7 +55,7 @@ const Form: IForm = props => {
 
   const onSubmit: FormEventHandler = useCallback(
     e => formRef.current && handleSubmit(e, formRef.current, props),
-    [props.onSubmit, props.onSuccess, props.onError],
+    [props.klass, props.onSubmit, props.onSuccess, props.onError],
   );
 
   return <component.current formRef={formRef} {...props} onSubmit={onSubmit} />;

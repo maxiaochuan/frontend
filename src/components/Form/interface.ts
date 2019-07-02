@@ -3,14 +3,18 @@ import { FormComponentProps, FormItemProps, FormProps } from 'antd/lib/form';
 import { GetFieldDecoratorOptions, WrappedFormUtils } from 'antd/lib/form/Form';
 import { ComponentClass, MutableRefObject, ReactElement, ReactNode } from 'react';
 
+export type FormMethod = 'PATCH' | 'POST';
+
 export type FormChildren =
   | Array<ReactElement<IFormItemProps | null>>
   | ReactElement<IFormItemProps>
   | null;
 
 export interface IFormCommonProps {
-  formRef?: MutableRefObject<WrappedFormUtils | undefined>;
   klass: string;
+  method: FormMethod;
+
+  formRef?: MutableRefObject<WrappedFormUtils | undefined>;
   children?: FormChildren;
 }
 
@@ -21,7 +25,7 @@ export interface IFormHandlerProps {
 }
 
 export interface IFormViewProps
-  extends Omit<FormProps, 'form' | 'children' | 'onError'>,
+  extends Omit<FormProps, 'form' | 'children' | 'onError' | 'method'>,
     FormComponentProps,
     IFormCommonProps {}
 

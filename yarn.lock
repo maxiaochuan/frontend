@@ -1166,7 +1166,7 @@
   resolved "http://registry.npm.taobao.org/@mxcins/lodash/download/@mxcins/lodash-1.0.1.tgz#8a3d6ddddf87f9bef47750f870901074fbe50cd1"
   integrity sha1-ij1t3d+H+b70d1D4cJAQdPvlDNE=
 
-"@mxcins/pluralize@0.1.1":
+"@mxcins/pluralize@^0.1.1":
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/@mxcins/pluralize/download/@mxcins/pluralize-0.1.1.tgz#33cda883747ffbc2593d63382ad01dbe4b3563ae"
   integrity sha1-M82og3R/+8JZPWM4KtAdvks1Y64=

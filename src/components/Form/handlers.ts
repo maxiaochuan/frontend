@@ -1,10 +1,14 @@
+import pluralize from '@mxcins/pluralize';
 import { IObjectType } from '@mxcins/types';
 import { message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormEvent } from 'react';
 
-import { ResponseError } from '@/common';
-import { IFormHandlerProps } from './interface';
+import { request, ResponseError } from '@/common';
+import { FormMethod, IFormProps } from './interface';
+
+const getUri = (klass: string, method: FormMethod) => 
+  method === 'POST' ? pluralize.plural(klass) : method === 'PATCH' ? klass : ''
 
 const validate = async (form: WrappedFormUtils) =>
   new Promise<[IObjectType, IObjectType]>(resolve =>
@@ -14,7 +18,7 @@ const validate = async (form: WrappedFormUtils) =>
 export const handleSubmit = async (
   e: FormEvent,
   form: WrappedFormUtils,
-  props: IFormHandlerProps,
+  props: IFormProps,
 ) => {
   e.preventDefault();
   const [errors, values] = await validate(form);
@@ -26,7 +30,8 @@ export const handleSubmit = async (
   const { onSuccess, onError } = props;
 
   try {
-    const resp = await props.onSubmit(values);
+    const { klass, method } = props;
+    const resp = await request(getUri(klass, method), { method, data: { [klass]: values } });
     if (onSuccess) {
       return onSuccess(resp);
     }

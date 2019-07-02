@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@mxcins/lodash": "1.0.1",
-    "@mxcins/pluralize": "0.1.1",
+    "@mxcins/pluralize": "^0.1.1",
     "@mxcins/request": "1.4.0",
     "@mxcins/utils": "1.0.1",
     "@types/lodash-es": "4.17.3",
