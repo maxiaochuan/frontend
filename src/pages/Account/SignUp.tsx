@@ -38,7 +38,7 @@ const SignUp: SFC<ISignUpProps> = () => {
         <h1 style={{ textAlign: 'center' }}>
           <FormattedMessage id="page.account.signup.title" />
         </h1>
-        <Form.Rest klass="user" mode="create">
+        <Form klass="user" method="POST">
           <Form.Item
             name="name"
             component={Input}
@@ -56,7 +56,7 @@ const SignUp: SFC<ISignUpProps> = () => {
           <Form.Item name="password_confirmation" {...FORM_ITEM_LAYOUT}>
             <Input type="password" autoComplete="new-password" />
           </Form.Item>
-        </Form.Rest>
+        </Form>
       </Col>
     </Row>
   );

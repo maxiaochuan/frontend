@@ -8,7 +8,7 @@ import { request, ResponseError } from '@/common';
 import { FormMethod, IFormProps } from './interface';
 
 const getUri = (klass: string, method: FormMethod) => 
-  method === 'POST' ? pluralize.plural(klass) : method === 'PATCH' ? klass : ''
+  method === 'POST' ? `/${pluralize.plural(klass)}` : method === 'PATCH' ? `/${klass}` : ''
 
 const validate = async (form: WrappedFormUtils) =>
   new Promise<[IObjectType, IObjectType]>(resolve =>
@@ -45,6 +45,7 @@ export const handleSubmit = async (
           prev[key] = {
             value: fieldsValue[key],
             errors: data[key].map(er => new Error(`${key} ${er}, `)),
+            serverError: true,
           };
           return prev;
         }, {});

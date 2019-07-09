@@ -1,4 +1,5 @@
-import { Form as Base } from 'antd';
+import { IObjectType } from '@mxcins/types';
+import { Button, Form as Base } from 'antd';
 import { FormCreateOption, WrappedFormUtils } from 'antd/lib/form/Form';
 import React, {
   Children,
@@ -9,12 +10,19 @@ import React, {
   useCallback,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react';
+
+import { FormattedMessage } from '@/components';
 
 import { handleSubmit } from './handlers';
 import { IFormProps, IFormViewProps } from './interface';
 import Item from './Item';
 
+/**
+ * children render, add props form && klass
+ * @param props IFormViewProps
+ */
 const renderItems = (props: IFormViewProps) => {
   return Children.map(props.children || [], item => {
     if (isValidElement(item)) {
@@ -24,19 +32,34 @@ const renderItems = (props: IFormViewProps) => {
   });
 };
 
+const hasErrors = (fieldsError: IObjectType) => Object.keys(fieldsError).some(field => fieldsError[field]);
+
 const FormView: SFC<IFormViewProps> = props => {
   const { formRef, form } = props;
+  const { getFieldsError } = props.form;
 
   useImperativeHandle(formRef, () => form);
 
-  return <Base onSubmit={props.onSubmit}>{renderItems(props)}</Base>;
+  const disabled = hasErrors(getFieldsError());
+
+  return (
+    <Base onSubmit={props.onSubmit}>
+      {renderItems(props)}
+      <Base.Item wrapperCol={{ offset: 4, span: 14 }}>
+        <Button htmlType="submit" type="primary" style={{ width: '100%' }} disabled={disabled}>
+          <FormattedMessage id="form.submit" />
+        </Button>
+      </Base.Item>
+    </Base>
+  );
+
 };
 
 interface IForm extends SFC<IFormProps> {
   Item: typeof Item;
 }
 
-const options: FormCreateOption<IFormProps> = {
+const options: FormCreateOption<IFormViewProps> = {
   onValuesChange(props, values) {
     if (props.onValuesChange) {
       props.onValuesChange(values);
@@ -47,18 +70,35 @@ const options: FormCreateOption<IFormProps> = {
       }
     }
   },
+  onFieldsChange(props, _, fields) {
+    props.onFieldsChange(fields);
+  },
+  mapPropsToFields(props) {
+    const { fields } = props;
+    return Object.keys(fields).reduce<IObjectType>((prev, k) => {
+      const f = fields[k];
+      const changedAfterServerError = f.serverError && f.touched;
+      prev[k] = Base.createFormField({
+        ...f,
+        value: f.value,
+        errors: changedAfterServerError ? undefined : f.errors,
+      })
+      return prev;
+    }, {});
+  }
 };
 
 const Form: IForm = props => {
   const component = useRef(Base.create(options)(FormView));
   const formRef = useRef<WrappedFormUtils>();
+  const [fields, setFields] = useState<IObjectType>({});
 
   const onSubmit: FormEventHandler = useCallback(
     e => formRef.current && handleSubmit(e, formRef.current, props),
     [props.klass, props.onSubmit, props.onSuccess, props.onError],
   );
 
-  return <component.current formRef={formRef} {...props} onSubmit={onSubmit} />;
+  return <component.current formRef={formRef} {...props} onSubmit={onSubmit} fields={fields} onFieldsChange={setFields} />;
 };
 
 Form.Item = Item;

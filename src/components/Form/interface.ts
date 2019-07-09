@@ -16,24 +16,26 @@ export interface IFormCommonProps {
 
   formRef?: MutableRefObject<WrappedFormUtils | undefined>;
   children?: FormChildren;
+
+  onValuesChange?: (values: IObjectType) => void;
+  onValueChange?: (key: string, value: any) => void;
 }
 
 export interface IFormHandlerProps {
-  onSubmit: <T = any>(values: IObjectType) => T;
-  onSuccess: (values: IObjectType) => void;
-  onError: (error: Error) => void;
+  onSubmit?: <T = any>(values: IObjectType) => T;
+  onSuccess?: (values: IObjectType) => void;
+  onError?: (error: Error) => void;
 }
 
 export interface IFormViewProps
   extends Omit<FormProps, 'form' | 'children' | 'onError' | 'method'>,
     FormComponentProps,
-    IFormCommonProps {}
+    IFormCommonProps {
+      fields: IObjectType;
+      onFieldsChange: (fields: IObjectType) => void;
+    }
 
-export interface IFormProps extends IFormCommonProps, FormComponentProps, IFormHandlerProps {
-  mode: 'create' | 'update';
-
-  onValuesChange: (values: IObjectType) => void;
-  onValueChange: (key: string, value: any) => void;
+export interface IFormProps extends IFormCommonProps, IFormHandlerProps {
 }
 
 export interface IFormItemProps extends FormItemProps, Partial<FormComponentProps> {
