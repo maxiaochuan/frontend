@@ -129,7 +129,7 @@ export const reducer: Reducer<IContextState, IAction> = (state, action) => {
       const style = window.getComputedStyle(wrapper);
       const wrapperWidth = parseInt(style.width as string, 10);
       const width = Object.values(state.columnExtends).reduce((prev, c) => {
-        prev += c.width as number;
+        prev += (c as any).width as number;
         return prev;
       }, 0);
       if (wrapperWidth < width) {

@@ -1,28 +1,31 @@
 import { IObjectType, IRouteComponentProps } from '@mxcins/types';
 import React, { SFC } from 'react';
 
-import { ITableCommonProps, Table } from '@/components';
-import { withQuery } from '@/decorators';
+import { Table } from '@/components';
 import { GQLUser } from '@/graphql/generated';
 import * as services from './services.gql';
 
 export interface IUsers extends IRouteComponentProps<IObjectType> {}
 
-const columnExtends = {
+const USERS_COLUMN_EXTENDS = {
   name: { editing: true },
 };
 
 const USERS_DEFAULT_COLUMNS: Array<keyof GQLUser> = ['id', 'name'];
 
-const Users = withQuery<ITableCommonProps>(services.Users, {
-  klass: 'user',
-  columnExtends,
-  defaultColumns: USERS_DEFAULT_COLUMNS,
-  controllers: true,
-})(Table.Query);
+const USERS_QUERY = {
+  service: services.Users,
+}
 
 const Side: SFC<IUsers> = () => {
-  return <Users />;
+  return (
+    <Table.Query
+      klass="user"
+      query={USERS_QUERY}
+      defaultColumns={USERS_DEFAULT_COLUMNS}
+      columnExtends={USERS_COLUMN_EXTENDS}
+    />
+  )
 };
 
 export default Side;

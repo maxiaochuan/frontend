@@ -1,4 +1,3 @@
-import { Omit } from '@mxcins/types';
 import { Col, Input } from 'antd';
 import React, { SFC, useRef } from 'react';
 

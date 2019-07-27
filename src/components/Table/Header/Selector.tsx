@@ -1,4 +1,3 @@
-import { Omit } from '@mxcins/types';
 import { Checkbox, Col, Collapse } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import React, { SFC } from 'react';

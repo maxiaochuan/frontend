@@ -19,6 +19,7 @@ import Item, { IFormItemProps } from './Item';
 type Items = Array<ReactElement<IFormItemProps | null>> | ReactElement<IFormItemProps> | null;
 
 export interface IFormProps extends FormProps {
+  form: WrappedFormUtils<any>;
   klass: string;
   children?: Items;
   action?: any;
@@ -126,7 +127,7 @@ const options: FormCreateOption<IFormProps> = {
   },
 };
 
-const WrappedBase = withRouter(BasicForm.create<IFormProps>(options)(Base));
+const WrappedBase = withRouter(BasicForm.create<IFormProps>(options)(Base) as any);
 
 interface IFormSFC extends SFC<IFormProps> {
   _VITAL_FORM: boolean;
