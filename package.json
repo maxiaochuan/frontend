@@ -12,6 +12,7 @@
   },
   "author": "Xiaochuan Ma <mxcins@gmail.com>",
   "scripts": {
+    "deploy": "node ./scripts/deploy.js",
     "start": "umi dev",
     "build": "umi build",
     "lint": "yarn lint:style && yarn lint:ts && yarn ts-compile-check",
