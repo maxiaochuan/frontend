@@ -1,7 +1,11 @@
 import React, { SFC } from 'react';
 
-const Form: SFC = () => {
+import Item from './Item';
+
+const Form: SFC & { Item: typeof Item } = () => {
   return <div> form </div>;
 };
+
+Form.Item = Item;
 
 export default Form;
