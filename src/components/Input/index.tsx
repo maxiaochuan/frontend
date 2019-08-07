@@ -1,8 +1,9 @@
 import { Input as Base } from 'antd';
-import React, { SFC } from 'react';
+import { InputProps } from 'antd/lib/input';
+import React, { forwardRef, SFC } from 'react';
 
-const Input: SFC = props => {
-  return <Base {...props} />;
+const Input: SFC<InputProps> = (props, ref) => {
+  return <Base {...props} ref={ref} />;
 };
 
-export default Input;
+export default forwardRef(Input);

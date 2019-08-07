@@ -1,22 +1,17 @@
 import { Form as Base } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
 import React, { Children, cloneElement, isValidElement, ReactElement, SFC } from 'react';
 
-import { IFormChildren } from './interface';
+import { IInnerFormProps } from './interface';
+import { IFormItemProps } from './Item';
 
-interface IInnerForm extends FormComponentProps {
-  one?: any;
-  children?: IFormChildren;
-}
-
-const Inner: SFC<IInnerForm> = props => {
-  const { children, form, ...others } = props;
+const InnerForm: SFC<IInnerFormProps> = props => {
+  const { children, form, locale, ...others } = props;
 
   return (
     <Base {...others}>
       {Children.map(children, child => {
         if (isValidElement(child)) {
-          return cloneElement(child as ReactElement<any>, { form });
+          return cloneElement(child as ReactElement<IFormItemProps>, { form, locale });
         }
         return null;
       })}
@@ -24,6 +19,6 @@ const Inner: SFC<IInnerForm> = props => {
   );
 };
 
-const Enhanced = Base.create<IInnerForm>()(Inner);
+const Enhanced = Base.create<IInnerFormProps>()(InnerForm);
 
 export default Enhanced;

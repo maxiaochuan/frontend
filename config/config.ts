@@ -4,36 +4,37 @@ const config: IConfig = {
   hash: true,
   treeShaking: true,
   plugins: [
-    ['umi-plugin-react', {
-      targets: {
-        chrome: 49,
-        firefox: 45,
-        safari: 10,
-        ie: 10,
-        edge: 13,
-        ios: 10,
+    [
+      'umi-plugin-react',
+      {
+        antd: true,
+        targets: {
+          chrome: 49,
+          firefox: 45,
+          safari: 10,
+          ie: 10,
+          edge: 13,
+          ios: 10,
+        },
+        locale: {
+          default: 'en-US',
+          baseNavigator: false,
+        },
+        dynamicImport: {
+          webpackChunkName: true,
+          level: 3,
+        },
+        dll: {
+          include: ['react', 'react-dom', 'antd'],
+        },
       },
-      locale: {
-        default: 'en-US',
-        baseNavigator: false,
-      },
-      dynamicImport: {
-        webpackChunkName: true,
-        level: 3,
-      },
-      dll: {
-        include: [
-          'react',
-          'react-dom',
-        ],
-      },
-    }],
+    ],
   ],
   chainWebpack(chainConfig: any) {
     chainConfig.resolve.mainFields
       .add('main')
       .prepend('module')
-      .prepend('jsnext:main')
+      .prepend('jsnext:main');
 
     return chainConfig;
   },
@@ -44,6 +45,6 @@ const config: IConfig = {
     },
   },
   // ignoreMomentLocale: true,
-}
+};
 
 export default config;

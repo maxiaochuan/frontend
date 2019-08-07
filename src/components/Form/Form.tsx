@@ -1,16 +1,14 @@
-import React, { SFC } from 'react';
+import React, { SFC, useRef } from 'react';
 
 import Enhanced from './Enhanced';
-import { IFormChildren } from './interface';
+import { IFormProps } from './interface';
 import Item from './Item';
-
-interface IFormProps {
-  children?: IFormChildren;
-}
 
 const Form: SFC<IFormProps> & { Item: typeof Item } = props => {
   const { children } = props;
-  return <Enhanced>{children}</Enhanced>;
+  const locale = useRef(props.locale || props.klass);
+
+  return <Enhanced locale={locale.current}>{children}</Enhanced>;
 };
 
 Form.Item = Item;

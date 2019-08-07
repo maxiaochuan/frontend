@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@mxcins/lodash": "1.0.0",
+    "antd": "3.21.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "umi": "2.8.16",
@@ -55,10 +56,10 @@
     "stylelint-config-mxcins": "1.0.0",
     "tslint": "5.16.0",
     "tslint-config-mxcins": "1.0.0",
-    "typescript": "3.4.3",
+    "typescript": "3.5.2",
     "umi-types": "0.3.15"
   },
   "resolutions": {
-    "@types/react": "16.8.8"
+    "@types/react": "16.8.14"
   }
 }

@@ -6,8 +6,11 @@ import { Form, Input } from '@/components';
 const Join: SFC<IRouteComponentProps> = () => {
   return (
     <div>
-      <Form>
-        <Form.Item>
+      <Form klass="user">
+        <Form.Item name="name">
+          <Input />
+        </Form.Item>
+        <Form.Item name="password">
           <Input />
         </Form.Item>
       </Form>
