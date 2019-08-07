@@ -11,17 +11,19 @@ export interface IFormItemProps extends FormItemProps, GetFieldDecoratorOptions 
 }
 
 const Item: SFC<IFormItemProps> = props => {
-  const label = useRef(
-    props.locale ? formatMessage({ id: `${props.locale}.${props.name}` }) : props.label,
-  );
-  const { form } = props;
+  const { form, name, locale, label, children, ...others } = props;
+  const labelRef = useRef(locale ? formatMessage({ id: `${locale}.${name}` }) : label);
 
   if (!form) {
-    return null;
+    return (
+      <Base.Item label={labelRef.current} {...others}>
+        {props.children}
+      </Base.Item>
+    );
   }
 
   return (
-    <Base.Item label={label.current}>
+    <Base.Item label={labelRef.current} {...others}>
       {form.getFieldDecorator(props.name)(props.children)}
     </Base.Item>
   );

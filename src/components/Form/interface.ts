@@ -4,7 +4,6 @@ import { IFormItemProps } from './Item';
 
 export interface IFormCommonProps {
   locale?: string;
-  children?: IFormChildren;
 }
 
 export interface IInnerFormProps extends IFormCommonProps {
