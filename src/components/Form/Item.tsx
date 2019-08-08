@@ -1,18 +1,14 @@
 import { Form as Base } from 'antd';
-import { FormItemProps } from 'antd/lib/form';
-import { GetFieldDecoratorOptions, WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { SFC, useRef } from 'react';
 import { formatMessage } from 'umi/locale';
 
-export interface IFormItemProps extends FormItemProps, GetFieldDecoratorOptions {
-  name: string;
-  form?: WrappedFormUtils;
-  locale?: string;
-}
+import { IFormItemProps } from './interface';
 
 const Item: SFC<IFormItemProps> = props => {
-  const { form, name, locale, label, children, ...others } = props;
-  const labelRef = useRef(locale ? formatMessage({ id: `${locale}.${name}` }) : label);
+  const { form, name, locale, label, noLabel, children, ...others } = props;
+  const labelRef = useRef(
+    noLabel ? '' : locale ? formatMessage({ id: `${locale}.${name}` }) : label,
+  );
 
   if (!form) {
     return (
@@ -24,7 +20,7 @@ const Item: SFC<IFormItemProps> = props => {
 
   return (
     <Base.Item label={labelRef.current} {...others}>
-      {form.getFieldDecorator(props.name)(props.children)}
+      {form.getFieldDecorator(props.name, others)(props.children)}
     </Base.Item>
   );
 };

@@ -8,11 +8,14 @@ const Join: SFC<IRouteComponentProps> = () => {
   return (
     <div ref={divRef}>
       <Form klass="user">
-        <Form.Item name="name">
-          <Input />
+        <Form.Item name="name" rules={[{ required: true }]}>
+          <Input autoComplete="on" />
         </Form.Item>
-        <Form.Item name="password">
-          <Input />
+        <Form.Item name="password" rules={[{ required: true }]}>
+          <Input type="password" autoComplete="on" />
+        </Form.Item>
+        <Form.Item name="password_confirmation" rules={[{ required: true }]}>
+          <Input type="password" autoComplete="on" />
         </Form.Item>
       </Form>
     </div>

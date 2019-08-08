@@ -9,6 +9,13 @@ export const FORM_ITEM_LAYOUT = {
   },
 };
 
+export const NO_LABEL_FORM_ITEM_LAYOUT = {
+  wrapperCol: {
+    xs: { span: 24 },
+    md: { span: 24 },
+  },
+};
+
 export const TAIL_FORM_ITEM_LAYOUT = {
   wrapperCol: {
     xs: {
