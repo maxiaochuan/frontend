@@ -1,30 +1,37 @@
 import { Form as Base } from 'antd';
 import Debug from 'debug';
-import React, { Children, cloneElement, isValidElement, ReactElement, SFC } from 'react';
-import { FormattedMessage } from 'umi/locale';
+import React, { Children, cloneElement, isValidElement, ReactElement, ReactNode, SFC } from 'react';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 
 import { Button } from '@/components';
-import { FORM_ITEM_LAYOUT, NO_LABEL_FORM_ITEM_LAYOUT, TAIL_FORM_ITEM_LAYOUT } from './const';
+import { TAIL_FORM_ITEM_LAYOUT } from './const';
 import { IFields, IFormItemProps, IInnerFormProps } from './interface';
 import Item from './Item';
 
 const debug = Debug('form:enhanced');
 
+const map = (children: ReactNode, props: IInnerFormProps) =>
+  Children.map(children, child => {
+    if (!(isValidElement(child) && (child.type as any).__FORM_ITEM)) {
+      return null;
+    }
+
+    const c = child as ReactElement<IFormItemProps>;
+    debug('map children: \n %o', c.props);
+    const { form, locale } = props;
+    const extra: Partial<IFormItemProps> = {
+      form,
+      label: c.props.label || (locale && formatMessage({ id: `${locale}.${c.props.name}` })),
+    };
+    return cloneElement(c, extra);
+  });
+
 const InnerForm: SFC<IInnerFormProps> = props => {
-  const { children, form, locale, noLabel, ...others } = props;
+  const { children, form, locale, label, ...others } = props;
 
   return (
-    <Base
-      layout="horizontal"
-      {...(noLabel ? NO_LABEL_FORM_ITEM_LAYOUT : FORM_ITEM_LAYOUT)}
-      {...others}
-    >
-      {Children.map(children, child => {
-        if (isValidElement(child)) {
-          return cloneElement(child as ReactElement<IFormItemProps>, { form, noLabel, locale });
-        }
-        return null;
-      })}
+    <Base {...others}>
+      {map(children, props)}
       <Item name="submit" {...TAIL_FORM_ITEM_LAYOUT}>
         <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
           <FormattedMessage id="form.submit" />

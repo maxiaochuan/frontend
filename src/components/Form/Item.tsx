@@ -1,28 +1,17 @@
 import { Form as Base } from 'antd';
-import React, { SFC, useRef } from 'react';
-import { formatMessage } from 'umi/locale';
+import React, { Children, SFC } from 'react';
 
 import { IFormItemProps } from './interface';
 
-const Item: SFC<IFormItemProps> = props => {
-  const { form, name, locale, label, noLabel, children, ...others } = props;
-  const labelRef = useRef(
-    noLabel ? '' : locale ? formatMessage({ id: `${locale}.${name}` }) : label,
-  );
+const FormItem: SFC<IFormItemProps> & { __FORM_ITEM: boolean } = props => {
+  const { form, name, children, ...others } = props;
 
-  if (!form) {
-    return (
-      <Base.Item label={labelRef.current} {...others}>
-        {props.children}
-      </Base.Item>
-    );
-  }
+  const only = Children.only(children);
+  const child = form ? form.getFieldDecorator(name, others)(only) : only;
 
-  return (
-    <Base.Item label={labelRef.current} {...others}>
-      {form.getFieldDecorator(props.name, others)(props.children)}
-    </Base.Item>
-  );
+  return <Base.Item {...others}>{child}</Base.Item>;
 };
 
-export default Item;
+FormItem.__FORM_ITEM = true;
+
+export default FormItem;

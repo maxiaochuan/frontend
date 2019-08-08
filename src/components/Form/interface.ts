@@ -12,22 +12,23 @@ export type IFields = Partial<{ [x: string]: IField }>;
 export type IValues = Partial<{ [x: string]: any }>;
 
 export interface IFormCommonProps {
-  locale?: string;
-  noLabel?: boolean;
+  label?: boolean;
   onFieldsChange?: (fields: IFields, all?: IFields) => void;
   onValuesChange?: (values: IValues, all?: IValues) => void;
   onValueChange?: (key: string, value: any) => void;
 }
 
 export interface IInnerFormProps extends IFormCommonProps {
+  locale: string;
   form: WrappedFormUtils;
 }
 
 export interface IFormProps extends IFormCommonProps {
   klass: string;
+  locale?: string;
 }
 
-export interface IFormItemProps extends IFormCommonProps, GetFieldDecoratorOptions {
+export interface IFormItemProps extends GetFieldDecoratorOptions {
   name: string;
   form?: WrappedFormUtils;
   label?: string;

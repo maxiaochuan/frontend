@@ -23,7 +23,7 @@ export const TAIL_FORM_ITEM_LAYOUT = {
       offset: 0,
     },
     sm: {
-      span: 8,
+      span: 10,
       offset: 6,
     },
   },
