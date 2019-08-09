@@ -1512,6 +1512,11 @@
   resolved "https://registry.npm.taobao.org/@mxcins/lodash/download/@mxcins/lodash-1.0.1.tgz#8a3d6ddddf87f9bef47750f870901074fbe50cd1"
   integrity sha1-ij1t3d+H+b70d1D4cJAQdPvlDNE=
 
+"@mxcins/pluralize@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.npm.taobao.org/@mxcins/pluralize/download/@mxcins/pluralize-0.1.1.tgz#33cda883747ffbc2593d63382ad01dbe4b3563ae"
+  integrity sha1-M82og3R/+8JZPWM4KtAdvks1Y64=
+
 "@mxcins/request@1.4.3":
   version "1.4.3"
   resolved "https://registry.npm.taobao.org/@mxcins/request/download/@mxcins/request-1.4.3.tgz#75b166d65a71c34b1fd52a37815b1522cb15b48b"
@@ -1691,7 +1696,14 @@
   resolved "https://registry.npm.taobao.org/@types/json-schema/download/@types/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
   integrity sha1-vf1p1h5GTcyBslFZwnDXWnPBpjY=
 
-"@types/lodash@^4.14.136":
+"@types/lodash-es@^4.17.3":
+  version "4.17.3"
+  resolved "https://registry.npm.taobao.org/@types/lodash-es/download/@types/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
+  integrity sha1-h+sLNnOwdrjuZV8YkCYKE2rwmi0=
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*", "@types/lodash@^4.14.136":
   version "4.14.136"
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
   integrity sha1-QT6FCJBGuGXZYMn/HUAOBMMatg8=
@@ -9086,6 +9098,11 @@ lodash-es@4.17.11:
   version "4.17.11"
   resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.11.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
   integrity sha1-FFq0p6xcXlKjUx+08xAlWhUrS+A=
+
+lodash-es@4.17.15:
+  version "4.17.15"
+  resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.15.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
+  integrity sha1-Ib2Wg5NUQS8j16EDQOXqxu5FXXg=
 
 lodash._getnative@^3.0.0:
   version "3.9.1"

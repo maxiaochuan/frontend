@@ -18,7 +18,7 @@ const Login: SFC<IRouteComponentProps> = () => {
         </FormattedMessage>
       </div>
       <div className={styles.form}>
-        <Form klass="user">
+        <Form klass="user" mode="create" uri="/login.json">
           <Form.Item name="email" rules={EMAIL_RULES}>
             <Input autoComplete="on" />
           </Form.Item>

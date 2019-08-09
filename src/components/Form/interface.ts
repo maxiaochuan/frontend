@@ -1,3 +1,4 @@
+import { IObjectType } from '@mxcins/types';
 import { GetFieldDecoratorOptions, WrappedFormUtils } from 'antd/lib/form/Form';
 import { ReactElement } from 'react';
 
@@ -21,13 +22,17 @@ export interface IFormCommonProps {
 export interface IInnerFormProps extends IFormCommonProps {
   locale: string;
   form: WrappedFormUtils;
-  onSubmit: (values: IValues) => Promise<void>;
+  onSubmit: (values: IValues) => Promise<[{ [x: string]: string[] } | null, IValues]>;
   isSubmitting: boolean;
 }
 
 export interface IFormProps extends IFormCommonProps {
   klass: string;
+  mode: 'create' | 'update';
+  uri?: string;
+  method?: 'PATCH' | 'POST';
   locale?: string;
+  params?: IObjectType;
 }
 
 export interface IFormItemProps extends GetFieldDecoratorOptions {

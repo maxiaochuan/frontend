@@ -9,7 +9,7 @@ const NAME_RULES = [{ type: 'string', required: true, max: 50 }];
 
 const EMAIL_RULES = [{ type: 'email', required: true, max: 255 }];
 
-const PASSWORD_RULES = [{ type: 'password', required: true, min: 6, max: 20 }];
+const PASSWORD_RULES = [{ type: 'string', required: true, max: 20 }];
 
 const Join: SFC<IRouteComponentProps> = () => {
   return (
@@ -18,7 +18,7 @@ const Join: SFC<IRouteComponentProps> = () => {
         <FormattedMessage id="route.join.title">{(txt: string) => <h1>{txt}</h1>}</FormattedMessage>
       </div>
       <div className={styles.form}>
-        <Form klass="user">
+        <Form klass="user" mode="create">
           <Form.Item name="name" rules={NAME_RULES}>
             <Input autoComplete="on" />
           </Form.Item>
