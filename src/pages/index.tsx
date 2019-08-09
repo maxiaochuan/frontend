@@ -1,13 +1,7 @@
 import { IRouteComponentProps } from '@mxcins/types';
-import React, { SFC, useEffect } from 'react';
-
-import { request } from '@/utils';
+import React, { SFC } from 'react';
 
 const Home: SFC<IRouteComponentProps> = props => {
-  useEffect(() => {
-    request('/api/users.json');
-  }, []);
-
   return <div>{JSON.stringify(props)}</div>;
 };
 

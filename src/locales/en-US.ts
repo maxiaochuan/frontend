@@ -6,4 +6,5 @@ export default {
   'form.submit': 'Submit',
 
   'route.join.title': 'Create Your Personal Account',
+  'route.login.title': 'Sign In',
 };

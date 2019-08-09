@@ -21,6 +21,8 @@ export interface IFormCommonProps {
 export interface IInnerFormProps extends IFormCommonProps {
   locale: string;
   form: WrappedFormUtils;
+  onSubmit: (values: IValues) => Promise<void>;
+  isSubmitting: boolean;
 }
 
 export interface IFormProps extends IFormCommonProps {

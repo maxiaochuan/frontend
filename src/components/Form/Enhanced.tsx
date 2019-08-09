@@ -1,6 +1,15 @@
 import { Form as Base } from 'antd';
 import Debug from 'debug';
-import React, { Children, cloneElement, isValidElement, ReactElement, ReactNode, SFC } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  FormEvent,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+  SFC,
+  useCallback,
+} from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 
 import { Button } from '@/components';
@@ -10,6 +19,11 @@ import Item from './Item';
 
 const debug = Debug('form:enhanced');
 
+const hasError = (fieldsError: { [x: string]: string[] | undefined }) => {
+  debug('hasError: \n errors: %o\n', fieldsError);
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+};
+
 const map = (children: ReactNode, props: IInnerFormProps) =>
   Children.map(children, child => {
     if (!(isValidElement(child) && (child.type as any).__FORM_ITEM)) {
@@ -17,7 +31,6 @@ const map = (children: ReactNode, props: IInnerFormProps) =>
     }
 
     const c = child as ReactElement<IFormItemProps>;
-    debug('map children: \n %o', c.props);
     const { form, locale } = props;
     const extra: Partial<IFormItemProps> = {
       form,
@@ -27,13 +40,31 @@ const map = (children: ReactNode, props: IInnerFormProps) =>
   });
 
 const InnerForm: SFC<IInnerFormProps> = props => {
-  const { children, form, locale, label, ...others } = props;
+  const { children, form, locale, label, isSubmitting, ...others } = props;
+
+  const onSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      form.validateFields((errors, values) => {
+        if (!errors && props.onSubmit) {
+          props.onSubmit(values);
+        }
+      });
+    },
+    [props.onSubmit],
+  );
 
   return (
-    <Base {...others}>
+    <Base {...others} onSubmit={onSubmit}>
       {map(children, props)}
       <Item name="submit" {...TAIL_FORM_ITEM_LAYOUT}>
-        <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          style={{ width: '100%' }}
+          disabled={isSubmitting || hasError(form.getFieldsError())}
+          loading={isSubmitting}
+        >
           <FormattedMessage id="form.submit" />
         </Button>
       </Item>
@@ -41,6 +72,9 @@ const InnerForm: SFC<IInnerFormProps> = props => {
   );
 };
 
+/**
+ * with antd form create
+ */
 const EnhancedForm = Base.create<IInnerFormProps>({
   onFieldsChange(props, fields: IFields, all: IFields) {
     debug('onFieldsChange\n props: %o\n fields: %o\n all: %o\n', props, fields, all);

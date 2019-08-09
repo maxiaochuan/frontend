@@ -41,6 +41,7 @@
   "dependencies": {
     "@mxcins/lodash": "1.0.0",
     "@mxcins/request": "1.4.3",
+    "@mxcins/utils": "1.5.1",
     "antd": "3.21.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
