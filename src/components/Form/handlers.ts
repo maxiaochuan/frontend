@@ -2,7 +2,7 @@ import { pluralize, request, ResponseError } from '@/utils';
 import { IObjectType } from '@mxcins/types';
 import Debug from 'debug';
 import { snakeCase } from 'lodash-es';
-import { IValues } from './interface';
+import { IFormSubmitResult, IValues } from './interface';
 
 const debug = Debug('form:handlers');
 
@@ -15,7 +15,7 @@ export const handleSubmit = async (
   klass: string,
   mode: 'create' | 'update',
   opts: { uri?: string; method?: string; values: IValues; params?: IObjectType },
-): Promise<[{ [x: string]: string[] } | null, IValues]> => {
+): Promise<IFormSubmitResult> => {
   const basename = `/${pluralize.plural(klass)}`;
   const uri =
     opts.uri ||
@@ -37,13 +37,13 @@ export const handleSubmit = async (
       data,
     });
 
-    return [null, resp];
+    return { values: resp };
   } catch (error) {
     debug('submit error \n %s \n %o', error.name, error.response);
     if (error.name === 'ResponseError') {
       const err = error as ResponseError;
       if (err.response.status === 422) {
-        return [err.data, values];
+        return { errors: err.data };
       }
     }
     throw error;

@@ -1,6 +1,7 @@
 import { Button } from '@/components';
 import { IObjectType } from '@mxcins/types';
 import { Form as Base } from 'antd';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Debug from 'debug';
 import React, {
   Children,
@@ -11,6 +12,7 @@ import React, {
   ReactNode,
   SFC,
   useCallback,
+  useState,
 } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { TAIL_FORM_ITEM_LAYOUT } from './const';
@@ -23,6 +25,9 @@ const hasError = (fieldsError: { [x: string]: string[] | undefined }) => {
   debug('hasError: \n errors: %o\n', fieldsError);
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 };
+
+const validate = async (form: WrappedFormUtils) =>
+  new Promise<[any, any]>(resolve => form.validateFields((e, v) => resolve([e, v])));
 
 const map = (children: ReactNode, props: IInnerFormProps) =>
   Children.map(children, child => {
@@ -40,26 +45,37 @@ const map = (children: ReactNode, props: IInnerFormProps) =>
   });
 
 const InnerForm: SFC<IInnerFormProps> = props => {
-  const { children, form, locale, label, isSubmitting, ...others } = props;
+  const { children, form, locale, label, ...others } = props;
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const onSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-      form.validateFields((err, vs) => {
-        if (!err && props.onSubmit) {
-          props.onSubmit(vs).then(([errors, values]) => {
-            if (errors) {
-              const fields = Object.keys(errors).reduce<IObjectType>((prev, key) => {
-                prev[key] = { value: values[key], errors: errors[key].map(Error) };
-                return prev;
-              }, {});
-              form.setFields(fields);
-            } else {
-              form.setFieldsValue(values);
-            }
-          });
-        }
-      });
+    async (evt: FormEvent) => {
+      evt.preventDefault();
+      if (!props.onSubmit) {
+        return;
+      }
+      setSubmitting(true);
+      /**
+       * form validate
+       */
+      const [e, v] = await validate(form);
+      if (e) {
+        return setSubmitting(false);
+      }
+
+      const { errors, values } = await props.onSubmit(v);
+      if (errors) {
+        const fields = Object.keys(errors).reduce<IObjectType>((prev, key) => {
+          prev[key] = { value: v[key], errors: errors[key].map(Error) };
+          return prev;
+        }, {});
+        form.setFields(fields);
+      }
+      if (values) {
+        form.setFieldsValue(values);
+      }
+
+      return setSubmitting(false);
     },
     [props.onSubmit],
   );

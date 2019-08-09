@@ -1,6 +1,5 @@
 import { IObjectType } from '@mxcins/types';
 import { GetFieldDecoratorOptions, WrappedFormUtils } from 'antd/lib/form/Form';
-import { ReactElement } from 'react';
 
 export interface IField {
   name: string;
@@ -11,6 +10,10 @@ export interface IField {
 
 export type IFields = Partial<{ [x: string]: IField }>;
 export type IValues = Partial<{ [x: string]: any }>;
+export interface IFormSubmitResult {
+  values?: IValues;
+  errors?: IObjectType<string[]>;
+}
 
 export interface IFormCommonProps {
   label?: boolean;
@@ -22,8 +25,7 @@ export interface IFormCommonProps {
 export interface IInnerFormProps extends IFormCommonProps {
   locale: string;
   form: WrappedFormUtils;
-  onSubmit: (values: IValues) => Promise<[{ [x: string]: string[] } | null, IValues]>;
-  isSubmitting: boolean;
+  onSubmit: (values: IValues) => Promise<IFormSubmitResult>;
 }
 
 export interface IFormProps extends IFormCommonProps {
@@ -33,6 +35,7 @@ export interface IFormProps extends IFormCommonProps {
   method?: 'PATCH' | 'POST';
   locale?: string;
   params?: IObjectType;
+  onError?: (err: Error) => IObjectType<string[]>;
 }
 
 export interface IFormItemProps extends GetFieldDecoratorOptions {
@@ -40,5 +43,3 @@ export interface IFormItemProps extends GetFieldDecoratorOptions {
   form?: WrappedFormUtils;
   label?: string;
 }
-
-export type IFormChildren = ReactElement<IFormItemProps> | Array<ReactElement<IFormItemProps>>;
