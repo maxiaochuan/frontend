@@ -36,7 +36,7 @@ export interface IFormProps extends IFormCommonProps {
   locale?: string;
   params?: IObjectType;
   onSuccess?: (values: IValues) => void;
-  onError?: (err: Error) => IObjectType<string[]>;
+  onError?: (err: Error) => IObjectType<string[]> | undefined;
 }
 
 export interface IFormItemProps extends GetFieldDecoratorOptions {

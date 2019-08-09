@@ -3,11 +3,14 @@ import { ResponseError } from '@/utils';
 import { IRouteComponentProps } from '@mxcins/types';
 import React, { SFC } from 'react';
 import { FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import styles from './style.less';
 
 const EMAIL_RULES = [{ type: 'email', required: true, max: 255 }];
 
 const PASSWORD_RULES = [{ type: 'string', required: true, min: 6, max: 20 }];
+
+const onSuccess = () => router.push('/');
 
 const handleError = (error: Error) => {
   if (error.name === 'ResponseError') {
@@ -29,7 +32,13 @@ const Login: SFC<IRouteComponentProps> = () => {
         </FormattedMessage>
       </div>
       <div className={styles.form}>
-        <Form klass="user" mode="create" uri="/login.json" onError={handleError}>
+        <Form
+          klass="user"
+          mode="create"
+          uri="/login.json"
+          onSuccess={onSuccess}
+          onError={handleError}
+        >
           <Form.Item name="email" rules={EMAIL_RULES}>
             <Input autoComplete="on" />
           </Form.Item>

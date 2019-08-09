@@ -64,7 +64,7 @@ const InnerForm: SFC<IInnerFormProps> = props => {
       const { errors, values } = await props.onSubmit(v);
       if (errors) {
         const fields = Object.keys(errors).reduce<IObjectType>((prev, key) => {
-          prev[key] = { value: v[key], errors: errors[key].map(Error) };
+          prev[key] = { value: v[key], errors: [new Error(`${key} ${errors[key].join(', ')}`)] };
           return prev;
         }, {});
         form.setFields(fields);

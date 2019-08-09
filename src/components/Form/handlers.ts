@@ -1,10 +1,15 @@
 import { pluralize, request, ResponseError } from '@/utils';
 import { IObjectType } from '@mxcins/types';
+import { message } from 'antd';
 import Debug from 'debug';
 import { snakeCase } from 'lodash-es';
 import { IFormSubmitResult, IValues } from './interface';
 
 const debug = Debug('form:handlers');
+
+export const handleSuccess = (_: IValues) => {
+  message.success('success');
+};
 
 /**
  *

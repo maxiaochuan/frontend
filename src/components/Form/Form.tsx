@@ -2,13 +2,23 @@ import Debug from 'debug';
 import React, { SFC, useCallback, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import Enhanced from './Enhanced';
-import { handleSubmit } from './handlers';
+import { handleSubmit, handleSuccess } from './handlers';
 import { IFormProps, IValues } from './interface';
 
 const debug = Debug('form:top');
 
 const Form: SFC<IFormProps & RouteComponentProps> = props => {
-  const { klass, mode, match, params, uri, method, onSuccess, onError, children } = props;
+  const {
+    klass,
+    mode,
+    match,
+    params,
+    uri,
+    method,
+    onSuccess = handleSuccess,
+    onError,
+    children,
+  } = props;
   const locale = useRef(props.locale || klass);
 
   const onSubmit = useCallback(
@@ -21,17 +31,13 @@ const Form: SFC<IFormProps & RouteComponentProps> = props => {
           params: { ...match.params, ...params },
         });
         debug('onSubmit \n values: \n %o ret: %o\n', values, result);
-        if (onSuccess) {
-          onSuccess(result.values || values);
+        if (!result.errors && onSuccess) {
+          onSuccess({ ...result.values, ...values });
         }
         return result;
       } catch (error) {
-        const errors = onError && onError(error);
-        if (errors) {
-          return {
-            values,
-            errors,
-          };
+        if (onError) {
+          return { errors: onError(error) };
         }
         throw error;
       }
