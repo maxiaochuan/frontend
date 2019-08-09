@@ -8,20 +8,23 @@ import { IFormProps, IValues } from './interface';
 const debug = Debug('form:top');
 
 const Form: SFC<IFormProps & RouteComponentProps> = props => {
-  const { klass, mode, match, params, uri, method, onError, children } = props;
+  const { klass, mode, match, params, uri, method, onSuccess, onError, children } = props;
   const locale = useRef(props.locale || klass);
 
   const onSubmit = useCallback(
     async (values: IValues) => {
       try {
-        const ret = await handleSubmit(klass, mode, {
+        const result = await handleSubmit(klass, mode, {
           uri,
           method,
           values,
           params: { ...match.params, ...params },
         });
-        debug('onSubmit \n values: \n %o ret: %o\n', values, ret);
-        return ret;
+        debug('onSubmit \n values: \n %o ret: %o\n', values, result);
+        if (onSuccess) {
+          onSuccess(result.values || values);
+        }
+        return result;
       } catch (error) {
         const errors = onError && onError(error);
         if (errors) {

@@ -35,6 +35,7 @@ export interface IFormProps extends IFormCommonProps {
   method?: 'PATCH' | 'POST';
   locale?: string;
   params?: IObjectType;
+  onSuccess?: (values: IValues) => void;
   onError?: (err: Error) => IObjectType<string[]>;
 }
 

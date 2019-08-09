@@ -55,9 +55,7 @@ const InnerForm: SFC<IInnerFormProps> = props => {
         return;
       }
       setSubmitting(true);
-      /**
-       * form validate
-       */
+
       const [e, v] = await validate(form);
       if (e) {
         return setSubmitting(false);
