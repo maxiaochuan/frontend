@@ -12,6 +12,7 @@ import React, {
   ReactNode,
   SFC,
   useCallback,
+  useImperativeHandle,
   useState,
 } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
@@ -39,14 +40,18 @@ const map = (children: ReactNode, props: IInnerFormProps) =>
     const { form, locale } = props;
     const extra: Partial<IFormItemProps> = {
       form,
-      label: c.props.label || (locale && formatMessage({ id: `${locale}.${c.props.name}` })),
+      label:
+        props.label &&
+        (c.props.label || (locale && formatMessage({ id: `${locale}.${c.props.name}` }))),
     };
     return cloneElement(c, extra);
   });
 
 const InnerForm: SFC<IInnerFormProps> = props => {
-  const { children, form, locale, label, ...others } = props;
+  const { children, form, locale, label, control, formRef, ...others } = props;
   const [isSubmitting, setSubmitting] = useState(false);
+
+  useImperativeHandle(formRef, () => form);
 
   const onSubmit = useCallback(
     async (evt: FormEvent) => {
@@ -78,20 +83,29 @@ const InnerForm: SFC<IInnerFormProps> = props => {
     [props.onSubmit],
   );
 
+  const ctl = control ? (
+    cloneElement(control as ReactElement, {
+      disabled: isSubmitting || hasError(form.getFieldsError()),
+      loading: isSubmitting,
+    })
+  ) : (
+    <Item {...TAIL_FORM_ITEM_LAYOUT}>
+      <Button
+        type="primary"
+        htmlType="submit"
+        style={{ width: '100%' }}
+        disabled={isSubmitting || hasError(form.getFieldsError())}
+        loading={isSubmitting}
+      >
+        <FormattedMessage id="form.submit" />
+      </Button>
+    </Item>
+  );
+
   return (
     <Base {...others} onSubmit={onSubmit}>
       {map(children, props)}
-      <Item name="submit" {...TAIL_FORM_ITEM_LAYOUT}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          style={{ width: '100%' }}
-          disabled={isSubmitting || hasError(form.getFieldsError())}
-          loading={isSubmitting}
-        >
-          <FormattedMessage id="form.submit" />
-        </Button>
-      </Item>
+      {ctl}
     </Base>
   );
 };
@@ -100,6 +114,7 @@ const InnerForm: SFC<IInnerFormProps> = props => {
  * with antd form create
  */
 const EnhancedForm = Base.create<IInnerFormProps>({
+  withRef: true,
   onFieldsChange(props, fields: IFields, all: IFields) {
     debug('onFieldsChange\n props: %o\n fields: %o\n all: %o\n', props, fields, all);
     if (props.onFieldsChange && Object.values(fields).every(f => !(f && f.validating))) {

@@ -18,6 +18,7 @@ const Form: SFC<IFormProps & RouteComponentProps> = props => {
     onSuccess = handleSuccess,
     onError,
     children,
+    ...others
   } = props;
   const locale = useRef(props.locale || klass);
 
@@ -46,10 +47,14 @@ const Form: SFC<IFormProps & RouteComponentProps> = props => {
   );
 
   return (
-    <Enhanced locale={locale.current} onSubmit={onSubmit}>
+    <Enhanced {...others} locale={locale.current} onSubmit={onSubmit}>
       {children}
     </Enhanced>
   );
+};
+
+Form.defaultProps = {
+  label: true,
 };
 
 export default withRouter(Form);

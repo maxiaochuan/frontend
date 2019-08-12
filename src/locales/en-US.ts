@@ -7,4 +7,5 @@ export default {
 
   'route.join.title': 'Create Your Personal Account',
   'route.login.title': 'Sign In',
+  'route.login.form.remember': 'Remember Me',
 };

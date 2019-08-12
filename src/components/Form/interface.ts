@@ -1,5 +1,6 @@
 import { IObjectType } from '@mxcins/types';
 import { GetFieldDecoratorOptions, WrappedFormUtils } from 'antd/lib/form/Form';
+import { ReactNode, Ref } from 'react';
 
 export interface IField {
   name: string;
@@ -17,6 +18,8 @@ export interface IFormSubmitResult {
 
 export interface IFormCommonProps {
   label?: boolean;
+  control?: ReactNode;
+  formRef?: Ref<WrappedFormUtils>;
   onFieldsChange?: (fields: IFields, all?: IFields) => void;
   onValuesChange?: (values: IValues, all?: IValues) => void;
   onValueChange?: (key: string, value: any) => void;
@@ -40,7 +43,7 @@ export interface IFormProps extends IFormCommonProps {
 }
 
 export interface IFormItemProps extends GetFieldDecoratorOptions {
-  name: string;
+  name?: string;
   form?: WrappedFormUtils;
   label?: string;
 }

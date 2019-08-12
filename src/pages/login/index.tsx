@@ -1,7 +1,8 @@
-import { Form, Input } from '@/components';
+import { Button, Checkbox, Form, Icon, Input } from '@/components';
 import { ResponseError } from '@/utils';
 import { IRouteComponentProps } from '@mxcins/types';
-import React, { SFC } from 'react';
+import React, { Fragment, SFC } from 'react';
+import Link from 'umi/link';
 import { FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
 import styles from './style.less';
@@ -23,6 +24,26 @@ const handleError = (error: Error) => {
   throw error;
 };
 
+const Control: SFC = props => (
+  <Form.Item>
+    <Button type="primary" htmlType="submit" {...props} style={{ width: '100%' }}>
+      Login
+    </Button>
+    Or <Link to="/join">register now!</Link>
+  </Form.Item>
+);
+
+const Remember: SFC = props => (
+  <Fragment>
+    <Checkbox {...props}>
+      <FormattedMessage id="route.login.form.remember" />
+    </Checkbox>
+    <a style={{ float: 'right' }} href="">
+      Forgot password
+    </a>
+  </Fragment>
+);
+
 const Login: SFC<IRouteComponentProps> = () => {
   return (
     <div className={styles.login}>
@@ -36,14 +57,28 @@ const Login: SFC<IRouteComponentProps> = () => {
           klass="user"
           mode="create"
           uri="/login.json"
+          label={false}
           onSuccess={onSuccess}
           onError={handleError}
+          control={<Control />}
         >
           <Form.Item name="email" rules={EMAIL_RULES}>
-            <Input autoComplete="on" />
+            <Input
+              autoComplete="on"
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Email"
+            />
           </Form.Item>
           <Form.Item name="password" rules={PASSWORD_RULES}>
-            <Input type="password" autoComplete="on" />
+            <Input
+              autoComplete="on"
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Password"
+              type="password"
+            />
+          </Form.Item>
+          <Form.Item name="remember" valuePropName="checked" initialValue={true}>
+            <Remember />
           </Form.Item>
         </Form>
       </div>
