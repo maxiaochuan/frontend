@@ -11,7 +11,7 @@ const request = factory({
   errorHandler: error => {
     debug('errorHandler\n response: %o\n data: %o', error.response, error.data);
     if (error.response.status === 401) {
-      if (error.data.status === 'VERIFICATION_ERROR') {
+      if (error.data.status === 'VERIFICATION_ERROR' || error.data.status === 'EXPIRED_SIGNATURE') {
         return router.push('/login');
       }
     }
