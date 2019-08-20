@@ -43,6 +43,10 @@ const config: IConfig = {
       target: 'http://localhost:3000',
       changeOrigin: true,
     },
+    '/socket': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    },
   },
   // ignoreMomentLocale: true,
 };

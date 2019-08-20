@@ -6,10 +6,15 @@ import { IFormItemProps } from './interface';
 const FormItem: SFC<IFormItemProps> & { __FORM_ITEM: boolean } = props => {
   const { form, name, children, ...others } = props;
 
-  const child =
-    form && name ? form.getFieldDecorator(name, others)(Children.only(children)) : children;
+  if (form && name) {
+    return (
+      <Base.Item {...others}>
+        {form.getFieldDecorator(name, others)(Children.only(children))}
+      </Base.Item>
+    );
+  }
 
-  return <Base.Item {...others}>{child}</Base.Item>;
+  return <Base.Item {...others}>{children}</Base.Item>;
 };
 
 FormItem.__FORM_ITEM = true;

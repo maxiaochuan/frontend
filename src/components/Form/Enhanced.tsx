@@ -30,7 +30,7 @@ const hasError = (fieldsError: { [x: string]: string[] | undefined }) => {
 const validate = async (form: WrappedFormUtils) =>
   new Promise<[any, any]>(resolve => form.validateFields((e, v) => resolve([e, v])));
 
-const map = (children: ReactNode, props: IInnerFormProps) =>
+const itemsRender = (children: ReactNode, props: IInnerFormProps) =>
   Children.map(children, child => {
     if (!(isValidElement(child) && (child.type as any).__FORM_ITEM)) {
       return null;
@@ -104,7 +104,7 @@ const InnerForm: SFC<IInnerFormProps> = props => {
 
   return (
     <Base {...others} onSubmit={onSubmit}>
-      {map(children, props)}
+      {itemsRender(children, props)}
       {ctl}
     </Base>
   );
@@ -114,7 +114,7 @@ const InnerForm: SFC<IInnerFormProps> = props => {
  * with antd form create
  */
 const EnhancedForm = Base.create<IInnerFormProps>({
-  withRef: true,
+  // withRef: true,
   onFieldsChange(props, fields: IFields, all: IFields) {
     debug('onFieldsChange\n props: %o\n fields: %o\n all: %o\n', props, fields, all);
     if (props.onFieldsChange && Object.values(fields).every(f => !(f && f.validating))) {

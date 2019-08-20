@@ -1,3 +1,4 @@
+import { omit } from '@mxcins/utils';
 import Debug from 'debug';
 import React, { SFC, useCallback, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -47,7 +48,7 @@ const Form: SFC<IFormProps & RouteComponentProps> = props => {
   );
 
   return (
-    <Enhanced {...others} locale={locale.current} onSubmit={onSubmit}>
+    <Enhanced {...omit(others, ['staticContext'])} locale={locale.current} onSubmit={onSubmit}>
       {children}
     </Enhanced>
   );
