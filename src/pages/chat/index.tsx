@@ -1,7 +1,7 @@
+import { Button, Input } from '@/components';
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import router from 'umi/router';
-import { Button, Input } from '@/components';
 
 export default class Chat extends Component<
   any,
