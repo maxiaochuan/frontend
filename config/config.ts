@@ -30,14 +30,9 @@ const config: IConfig = {
       },
     ],
   ],
-  chainWebpack(chainConfig: any) {
-    chainConfig.resolve.mainFields
-      .add('main')
-      .prepend('module')
-      .prepend('jsnext:main');
-
-    return chainConfig;
-  },
+  // chainWebpack(chainConfig: any) {
+  //   return chainConfig;
+  // },
   proxy: {
     '/api': {
       target: 'http://localhost:3000',
