@@ -1,13 +1,14 @@
-import { Button, Input } from '@/components';
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import router from 'umi/router';
+import { Button, Input } from '@/components';
 
 export default class Chat extends Component<
   any,
   { connected: boolean; messages: string[]; input: string }
 > {
   public socket: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -26,6 +27,7 @@ export default class Chat extends Component<
       }
     });
     socket.on('chat message', (msg: string) =>
+      // eslint-disable-next-line react/no-access-state-in-setstate
       this.setState({ messages: [...this.state.messages, msg] }),
     );
     this.socket = socket;
@@ -39,6 +41,7 @@ export default class Chat extends Component<
       this.setState({ input: '' });
     }
   };
+
   public render() {
     const { connected, messages, input } = this.state;
     return (
@@ -51,6 +54,7 @@ export default class Chat extends Component<
         <div>
           <ul>
             {messages.map((m, i) => (
+              // eslint-disable-next-line react/no-array-index-key
               <li key={`${i}`}>{m}</li>
             ))}
           </ul>

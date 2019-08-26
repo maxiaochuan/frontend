@@ -1,10 +1,10 @@
-import { Button, Form, Icon, Input } from '@/components';
-import { request } from '@/utils';
 import { IRouteComponentProps } from '@mxcins/types';
 import React, { SFC, useCallback, useState } from 'react';
-import { Redirect } from 'react-router';
+import Redirect from 'umi/redirect';
 import Link from 'umi/link';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import { request } from '@/utils';
+import { Button, Form, Icon, Input } from '@/components';
 import styles from './style.less';
 
 const NAME_RULES = [{ type: 'string', required: true, max: 50 }];

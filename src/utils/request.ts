@@ -1,7 +1,8 @@
 import { factory } from '@mxcins/request';
-export * from '@mxcins/request';
 import Debug from 'debug';
 import router from 'umi/router';
+
+export * from '@mxcins/request';
 
 const debug = Debug('utils:request');
 

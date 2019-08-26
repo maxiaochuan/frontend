@@ -1,14 +1,16 @@
+import React, { SFC, useCallback, useRef } from 'react';
+import { IRouteComponentProps } from '@mxcins/types';
 import { omit } from '@mxcins/utils';
 import Debug from 'debug';
-import React, { SFC, useCallback, useRef } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import withRouter from 'umi/withRouter';
+// import { RouteComponentProps, withRouter } from 'react-router';
 import Enhanced from './Enhanced';
 import { handleSubmit, handleSuccess } from './handlers';
 import { IFormProps, IValues } from './interface';
 
 const debug = Debug('form:top');
 
-const Form: SFC<IFormProps & RouteComponentProps> = props => {
+const Form: SFC<IFormProps & IRouteComponentProps> = props => {
   const {
     klass,
     mode,

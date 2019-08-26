@@ -1,8 +1,8 @@
-import { pluralize, request, ResponseError } from '@/utils';
 import { IObjectType } from '@mxcins/types';
 import { message } from 'antd';
 import Debug from 'debug';
 import { snakeCase } from 'lodash-es';
+import { pluralize, request, ResponseError } from '@/utils';
 import { IFormSubmitResult, IValues } from './interface';
 
 const debug = Debug('form:handlers');
@@ -24,7 +24,9 @@ export const handleSubmit = async (
   const basename = `/${pluralize.plural(klass)}`;
   const uri =
     opts.uri ||
+    // eslint-disable-next-line no-nested-ternary
     (mode === 'create' ? `${basename}.json` : mode === 'update' ? `${basename}/:id.json` : '');
+  // eslint-disable-next-line no-nested-ternary
   const method = opts.method || mode === 'create' ? 'POST' : mode === 'update' ? 'PATCH' : '';
 
   if (!uri || !method) {

@@ -5,7 +5,7 @@ import { ReactNode, Ref } from 'react';
 export interface IField {
   name: string;
   value?: any;
-  errors?: Array<{ message: string; field: string }>;
+  errors?: { message: string; field: string }[];
   [x: string]: any;
 }
 

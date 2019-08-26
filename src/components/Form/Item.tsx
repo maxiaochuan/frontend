@@ -3,7 +3,7 @@ import React, { Children, SFC } from 'react';
 
 import { IFormItemProps } from './interface';
 
-const FormItem: SFC<IFormItemProps> & { __FORM_ITEM: boolean } = props => {
+const FormItem: SFC<IFormItemProps> = props => {
   const { form, name, children, ...others } = props;
 
   if (form && name) {
@@ -16,7 +16,5 @@ const FormItem: SFC<IFormItemProps> & { __FORM_ITEM: boolean } = props => {
 
   return <Base.Item {...others}>{children}</Base.Item>;
 };
-
-FormItem.__FORM_ITEM = true;
 
 export default FormItem;

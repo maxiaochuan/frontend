@@ -1,4 +1,3 @@
-import { Button } from '@/components';
 import { IObjectType } from '@mxcins/types';
 import { Form as Base } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -16,6 +15,7 @@ import React, {
   useState,
 } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import { Button } from '@/components';
 import { TAIL_FORM_ITEM_LAYOUT } from './const';
 import { IFields, IFormItemProps, IInnerFormProps } from './interface';
 import Item from './Item';
@@ -32,7 +32,7 @@ const validate = async (form: WrappedFormUtils) =>
 
 const itemsRender = (children: ReactNode, props: IInnerFormProps) =>
   Children.map(children, child => {
-    if (!(isValidElement(child) && (child.type as any).__FORM_ITEM)) {
+    if (!isValidElement(child)) {
       return null;
     }
 

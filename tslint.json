@@ -1,8 +1,0 @@
-{
-  "extends": ["tslint-config-mxcins"],
-  "linterOptions": {
-    "exclude": [
-      "node_modules"
-    ]
-  }
-}
