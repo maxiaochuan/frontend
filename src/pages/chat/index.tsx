@@ -1,18 +1,17 @@
+import React, { createContext, Reducer, SFC, useEffect, useReducer, useRef } from 'react';
 import { tuple } from '@mxcins/types';
-import React, { createContext, Reducer, SFC, useEffect, useReducer } from 'react';
 import io from 'socket.io-client';
 
-const TYPES = tuple('INIT');
+const TYPES = tuple('MOUNT', 'UNMOUNT');
 type T = (typeof TYPES)[number];
 
 interface S {
-  socket: SocketIOClient.Socket;
   messages: string[];
 }
 
 interface A<R extends T = T> {
   type: R;
-  payload: R extends 'INIT' ? undefined : never;
+  payload?: R extends 'MOUNT' ? undefined : never;
 }
 
 const reducer: Reducer<S, A> = (prev, action) => {
@@ -29,8 +28,8 @@ export interface IChatProps {
 }
 
 const Chat: SFC<IChatProps> = () => {
+  const socket = useRef(io('/chat', { autoConnect: false }));
   const [state, dispatch] = useReducer(reducer, {
-    socket: io('/chat', { autoConnect: false }),
     messages: [],
   });
 
@@ -38,21 +37,19 @@ const Chat: SFC<IChatProps> = () => {
    * Initialization
    */
   useEffect(() => {
-    if (!state.socket.connected) {
-      state.socket.open();
-    }
-    return () => {
-      state.socket.close();
-    };
+    socket.current.on('error', (error: string) => {
+      console.log(error);
+    })
+    socket.current.open();
+
+    return () => { socket.current.close() }
   }, []);
 
-  console.log(state.socket);
-
   return (
-    <Context.Provider value={{ state, dispatch }}>
+    <Context.Provider value={{ state, dispatch, socket }}>
       <section>
         {`${state.messages}`}
-        {`${state.socket.connected}`}
+        {`${socket.current.connected}`}
       </section>
     </Context.Provider>
   );
