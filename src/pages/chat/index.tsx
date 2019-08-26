@@ -1,67 +1,61 @@
-import { Button, Input } from '@/components';
-import React, { Component } from 'react';
+import { tuple } from '@mxcins/types';
+import React, { createContext, Reducer, SFC, useEffect, useReducer } from 'react';
 import io from 'socket.io-client';
-import router from 'umi/router';
 
-export default class Chat extends Component<
-  any,
-  { connected: boolean; messages: string[]; input: string }
-> {
-  public socket: any;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      connected: false,
-      messages: [],
-      input: '',
-    };
-  }
+const TYPES = tuple('INIT');
+type T = (typeof TYPES)[number];
 
-  public componentDidMount() {
-    const socket = io.connect('/socket/chat');
-    socket.on('connect', () => this.setState({ connected: true }));
-    socket.on('error', (error: string) => {
-      if (error === 'Authorization Error') {
-        router.push('/login');
-      }
-    });
-    socket.on('chat message', (msg: string) =>
-      this.setState({ messages: [...this.state.messages, msg] }),
-    );
-    this.socket = socket;
-  }
-
-  public onChange = (e: any) => this.setState({ input: e.target.value });
-
-  public send = () => {
-    if (this.socket && this.state.connected) {
-      this.socket.emit('chat message', this.state.input);
-      this.setState({ input: '' });
-    }
-  };
-  public render() {
-    const { connected, messages, input } = this.state;
-    return (
-      <div>
-        <h2>Chat</h2>
-        <div>
-          <span>status: </span>
-          <span>{connected ? 'connected' : 'false'}</span>
-        </div>
-        <div>
-          <ul>
-            {messages.map((m, i) => (
-              <li key={`${i}`}>{m}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <Input value={input} onChange={this.onChange} />
-        </div>
-        <div>
-          <Button onClick={this.send}>Send</Button>
-        </div>
-      </div>
-    );
-  }
+interface S {
+  socket: SocketIOClient.Socket;
+  messages: string[];
 }
+
+interface A<R extends T = T> {
+  type: R;
+  payload: R extends 'INIT' ? undefined : never;
+}
+
+const reducer: Reducer<S, A> = (prev, action) => {
+  switch (action.type) {
+    default:
+      return prev;
+  }
+};
+
+const Context = createContext({});
+
+export interface IChatProps {
+  one?: any;
+}
+
+const Chat: SFC<IChatProps> = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    socket: io('/chat', { autoConnect: false }),
+    messages: [],
+  });
+
+  /**
+   * Initialization
+   */
+  useEffect(() => {
+    if (!state.socket.connected) {
+      state.socket.open();
+    }
+    return () => {
+      state.socket.close();
+    };
+  }, []);
+
+  console.log(state.socket);
+
+  return (
+    <Context.Provider value={{ state, dispatch }}>
+      <section>
+        {`${state.messages}`}
+        {`${state.socket.connected}`}
+      </section>
+    </Context.Provider>
+  );
+};
+
+export default Chat;
