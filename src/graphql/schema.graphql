@@ -1,0 +1,22 @@
+# source: http://localhost:3000/api/graphql
+# timestamp: Tue Aug 27 2019 23:31:20 GMT+0800 (China Standard Time)
+
+"""An ISO 8601-encoded datetime"""
+scalar ISO8601DateTime
+
+type Mutation {
+  """An example field added by the generator"""
+  testField: String!
+}
+
+type Query {
+  users: [User!]!
+}
+
+type User {
+  createdAt: ISO8601DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  updatedAt: ISO8601DateTime!
+}

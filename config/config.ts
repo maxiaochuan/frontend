@@ -21,6 +21,7 @@ const config: IConfig = {
           baseNavigator: false,
         },
         dynamicImport: {
+          loadingComponent: './components/PageLoading/index', 
           webpackChunkName: true,
           level: 3,
         },
