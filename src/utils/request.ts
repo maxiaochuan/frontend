@@ -1,4 +1,4 @@
-import { factory } from '@mxcins/request';
+import { extend } from '@mxcins/request';
 import Debug from 'debug';
 import router from 'umi/router';
 
@@ -6,7 +6,7 @@ export * from '@mxcins/request';
 
 const debug = Debug('utils:request');
 
-const request = factory({
+const request = extend({
   prefix: '/api',
   credentials: 'include',
   errorHandler: error => {

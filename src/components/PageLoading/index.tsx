@@ -7,7 +7,7 @@ const PageLoading: SFC = () => {
     <div style={{ paddingTop: 100, textAlign: 'center' }}>
       <Spin indicator={icon.current} tip="Loading..." size="large" />
     </div>
-  )
-}
+  );
+};
 
 export default PageLoading;

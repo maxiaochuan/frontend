@@ -6,3 +6,4 @@
 package.json
 .umi
 **/*.snap
+src/graphql

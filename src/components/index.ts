@@ -12,3 +12,5 @@ export { default as Checkbox } from './Checkbox';
 
 export * from './Icon';
 export { default as Icon } from './Icon';
+
+export { default as PageLoading } from './PageLoading';

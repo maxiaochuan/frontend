@@ -8,9 +8,7 @@ import { Button, Form, Icon, Input } from '@/components';
 import styles from './style.less';
 
 const NAME_RULES = [{ type: 'string', required: true, max: 50 }];
-
 const EMAIL_RULES = [{ type: 'email', required: true, max: 255 }];
-
 const PASSWORD_RULES = [{ type: 'string', required: true, min: 6, max: 20 }];
 
 const Control: SFC = props => (
@@ -25,12 +23,12 @@ const Control: SFC = props => (
 const Join: SFC<IRouteComponentProps> = () => {
   const [redirect, setRedirect] = useState(false);
 
-  const onSuccess = useCallback(async (values: any) => {
+  const onSuccess = useCallback(async (values: Record<string, string>) => {
     try {
       await request('/login.json', { method: 'POST', data: { user: values } });
       setRedirect(true);
     } catch (error) {
-      // tslint:disable-next-line:no-console
+      // eslint-disable-next-line no-console
       console.error(error.message);
     }
   }, []);
