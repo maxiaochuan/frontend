@@ -23,4 +23,3 @@ class ChatController extends Controller {
 }
 
 module.exports = ChatController;
-

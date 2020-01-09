@@ -17,6 +17,7 @@
     "debug": "egg-bin debug",
     "dev": "egg-bin dev",
     "lint": "eslint . --fix && yarn ts-compile-check",
+    "lint-staged": "lint-staged",
     "prettier": "prettier --write \"{,!(node_modules|build)/**/}*.{js,ts,jsx,tsx,less,md}\"",
     "start": "yarn build && egg-scripts start --daemon --title=egg-server-frontend  --sticky",
     "stop": "egg-scripts stop --title=egg-server-frontend",
@@ -35,12 +36,31 @@
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2"
   },
+    "husky": {
+    "hooks": {
+      "pre-commit": "yarn ts-compile-check && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "**/*.{less}": [
+      "stylelint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "antd": "3.25.2",
     "egg": "^2.15.1",
     "egg-scripts": "^2.11.0",
     "egg-socket.io": "^4.1.6",
     "egg-view-assets": "^1.6.0",
+    "husky": "4.0.0",
+    "lint-staged": "9.5.0",
     "react": "16.10.2",
     "react-dom": "16.10.2",
     "react-router": "5.1.2",

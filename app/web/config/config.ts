@@ -22,8 +22,8 @@ export default {
           name: 'Chat',
           path: '/chat',
           component: './Chat',
-        }
-      ]
-    }
-  ]
+        },
+      ],
+    },
+  ],
 };
