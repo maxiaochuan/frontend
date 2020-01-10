@@ -25,11 +25,6 @@ export default {
       component: '../layouts/CoreLayout',
       routes: [
         {
-          name: 'Chat',
-          path: '/chat',
-          component: './Chat',
-        },
-        {
           name: 'Accounts',
           path: '/accounts',
           component: '../layouts/AccountLayout',
@@ -45,6 +40,17 @@ export default {
           name: 'Home',
           path: '/',
           component: './Home',
+        },
+        {
+          path: '/',
+          component: '../layouts/AuthLayout',
+          routes: [
+            {
+              name: 'Chat',
+              path: '/chat',
+              component: './Chat',
+            },
+          ],
         },
       ],
     },
