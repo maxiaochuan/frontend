@@ -2,9 +2,11 @@ import React, { SFC, Fragment } from 'react';
 import { Input, Icon, Checkbox } from 'antd';
 import router from 'umi/router';
 import { formatMessage, FormattedMessage } from 'umi-plugin-locale/lib/locale';
+import { inject } from 'mobx-react';
 import { Form } from '@/components';
 
 import styles from './style.less';
+import { MainStore } from '@/stores';
 
 const EMAIL_RULES = [{ type: 'email', required: true, max: 255 }];
 
@@ -21,18 +23,24 @@ const Remember: SFC = props => (
   </Fragment>
 );
 
-const onSuccess = () => {
+const onSuccess = (main: MainStore) => {
+  main.authenticated = true;
   router.push('/');
 };
 
-const Login: SFC = () => (
+const Login: SFC<{ main: MainStore }> = props => (
   <div className={styles.Login}>
     <div>
       <h1>
         <FormattedMessage id="route.login.title" />
       </h1>
     </div>
-    <Form className={styles.Form} action="/login.json" klass="user" onSuccess={onSuccess}>
+    <Form
+      className={styles.Form}
+      action="/login.json"
+      klass="user"
+      onSuccess={() => onSuccess(props.main)}
+    >
       <Form.Item name="email" decorators={{ rules: EMAIL_RULES }}>
         <Input
           autoComplete="on"
@@ -55,4 +63,4 @@ const Login: SFC = () => (
   </div>
 );
 
-export default Login;
+export default inject('main')(Login);

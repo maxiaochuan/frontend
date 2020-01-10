@@ -1,24 +1,13 @@
-import React, { SFC, Fragment } from 'react';
+import React, { useRef } from 'react';
 import { Provider } from 'mobx-react';
 import Cookie from 'js-cookie';
 import JWT from 'jsonwebtoken';
 import { MainStore } from '@/stores';
 import { ISSRSFC } from '@/types';
 
-const main = new MainStore();
-
-const Auth: SFC<{ main: MainStore }> = props => {
-  console.log(props);
-  return <Fragment>{props.children}</Fragment>;
-};
-
-const CoreLayout: ISSRSFC<{ user: any }> = props => {
-  console.log('props', props.user);
-  return (
-    <Provider main={main}>
-      <Auth main={main}>{props.children}</Auth>
-    </Provider>
-  );
+const CoreLayout: ISSRSFC<{ init?: any }> = props => {
+  const mainRef = useRef(new MainStore(props.init));
+  return <Provider main={mainRef.current}>{props.children}</Provider>;
 };
 
 CoreLayout.getInitialProps = async props => {
@@ -27,12 +16,9 @@ CoreLayout.getInitialProps = async props => {
   if (auth) {
     const token = auth.replace(/^Bearer\+/, '');
     const decode = JWT.decode(token) as Record<string, any>;
-    const user = decode && decode.user;
-    if (user) {
-      main.whoami(user);
-    }
-    return { user: (decode && decode.user) || undefined };
+    return { init: decode };
   }
+
   return {};
 };
 
