@@ -12,17 +12,25 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
+    global.self = {};
+
     const render = server({
       root: this.root,
       polyfill: false,
       dev: ctx.app.config.env === 'local',
     });
 
-    const { ssrHtml } = await render({
-      req: { url: ctx.req.url },
+    const authorization = ctx.cookies.get('Authorization', { signed: false });
+
+    const { ssrHtml, matchPath } = await render({
+      req: { url: ctx.req.url, authorization },
     });
 
-    ctx.body = ssrHtml;
+    if (!matchPath) {
+      ctx.status = 404;
+    } else {
+      ctx.body = ssrHtml;
+    }
   }
 }
 

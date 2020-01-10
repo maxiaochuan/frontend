@@ -15,4 +15,9 @@ module.exports = {
     enable: true,
     package: 'egg-socket.io',
   },
+
+  proxy: {
+    enable: true,
+    package: 'egg-proxy',
+  },
 };

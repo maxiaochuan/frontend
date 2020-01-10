@@ -7,7 +7,7 @@ module.exports = {
       {
         timestamp: Date.now(),
       },
-      metadata,
+      metadata
     );
 
     return {

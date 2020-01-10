@@ -7,12 +7,18 @@ export default {
       'umi-plugin-react',
       {
         antd: true,
-        dynamicImport: {
-          webpackChunkName: true,
+        locale: {
+          baseNavigator: false,
+          useLocalStorage: false,
         },
+        // dynamicImport: {
+        //   webpackChunkName: true,
+        //   loadingComponent: './components/PageLoading',
+        // },
       },
     ],
   ],
+  // disableCSSModules: true,
   routes: [
     {
       path: '/',
@@ -22,6 +28,23 @@ export default {
           name: 'Chat',
           path: '/chat',
           component: './Chat',
+        },
+        {
+          name: 'Accounts',
+          path: '/accounts',
+          component: '../layouts/AccountLayout',
+          routes: [
+            {
+              name: 'Login',
+              path: '/accounts/login',
+              component: './Accounts/Login',
+            },
+          ],
+        },
+        {
+          name: 'Home',
+          path: '/',
+          component: './Home',
         },
       ],
     },

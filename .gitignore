@@ -15,4 +15,5 @@ typings/
 .vscode
 app/public
 app/web/pages/.umi
+app/web/pages/.umi-production
 config/manifest.json

@@ -39,6 +39,11 @@ module.exports = appInfo => {
     },
   };
 
+  config.proxy = {
+    host: 'http://127.0.0.1:3000',
+    match: /\/api/,
+  };
+
   config.io = {
     init: {},
     namespace: {
