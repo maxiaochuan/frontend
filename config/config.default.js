@@ -47,7 +47,9 @@ module.exports = appInfo => {
   config.io = {
     init: {},
     namespace: {
-      '/chat': {},
+      '/chat': {
+        connectionMiddleware: ['auth'],
+      },
     },
   };
 

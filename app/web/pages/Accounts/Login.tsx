@@ -24,7 +24,7 @@ const Remember: SFC = props => (
 );
 
 const onSuccess = (main: MainStore) => {
-  main.authenticated = true;
+  main.whoami();
   router.push('/');
 };
 

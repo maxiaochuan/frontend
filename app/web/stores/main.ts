@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import io from 'socket.io-client';
-// import Cookie from 'js-cookie';
+import JWT from 'jsonwebtoken';
+import Cookie from 'js-cookie';
 
 interface ICurrent {
   id: string;
@@ -9,10 +10,9 @@ interface ICurrent {
 }
 
 export default class MainStore {
-  constructor(init?: { user: any; exp: any }) {
-    if (init) {
-      this.whoami(init);
-    }
+  constructor(init?: string) {
+    console.log('constructor', init);
+    this.whoami(init);
   }
 
   @observable
@@ -21,10 +21,20 @@ export default class MainStore {
   @observable
   public authenticated? = false;
 
-  public io = io('/chat', { autoConnect: false });
+  public socket = io('/chat', { autoConnect: false });
 
-  public whoami({ user, exp }: { user: ICurrent; exp: number }) {
-    this.current = user;
-    this.authenticated = exp > new Date().getTime() / 1000;
+  // public whoami({ user, exp }: { user: ICurrent; exp: number }) {
+  public whoami(authorization?: string) {
+    const au = authorization || Cookie.get('Authorization') || '';
+    console.log('whoami', au);
+    if (au) {
+      const token = au.replace(/^Bearer\+/, '');
+      const decoded = JWT.decode(token);
+      if (decoded) {
+        const d = decoded as { user: ICurrent; exp: number };
+        this.current = d.user;
+        this.authenticated = d.exp > new Date().getTime() / 1000;
+      }
+    }
   }
 }
