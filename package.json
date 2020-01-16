@@ -56,6 +56,7 @@
   "dependencies": {
     "@mxcins/extensions": "^1.0.1",
     "@mxcins/request": "2.1.0-alpha.0",
+    "@mxcins/utils": "^1.7.1",
     "antd": "3.25.2",
     "egg": "^2.15.1",
     "egg-proxy": "^1.1.0",
@@ -68,6 +69,7 @@
     "lint-staged": "9.5.0",
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
+    "moment": "^2.24.0",
     "react": "16.10.2",
     "react-dom": "16.10.2",
     "react-router": "5.1.2",

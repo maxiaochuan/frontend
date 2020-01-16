@@ -1,10 +1,12 @@
-import React, { SFC, useEffect, useState } from 'react';
+import React, { SFC, useEffect, useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import { Socket } from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { List } from 'antd';
-import Sider from './Sider';
+import Content, { MessageList, EnterMessage } from './Content';
 import { MainStore } from '@/stores';
+import { reducer, IMSG } from './context';
+import styles from './style.less';
 
 const render = (user: { name: string; phone: string }) => (
   <List.Item>
@@ -12,10 +14,9 @@ const render = (user: { name: string; phone: string }) => (
   </List.Item>
 );
 
-const Online: SFC<{ users: { name: string; phone: string }[] }> = props => {
-  console.log('props.users', props.users);
-  return <List style={{ width: 200 }} bordered dataSource={props.users} renderItem={render} />;
-};
+const Online: SFC<{ users: { name: string; phone: string }[] }> = props => (
+  <List className={styles.Online} bordered dataSource={props.users} renderItem={render} />
+);
 
 interface IOnlineMsg {
   users: { name: string; phone: string }[];
@@ -23,27 +24,48 @@ interface IOnlineMsg {
   action: string;
 }
 
-const ChatCanvas: SFC<{ socket: typeof Socket; user: any }> = props => {
-  const [users, setUsers] = useState<{ name: string; phone: string }[]>([]);
-  const { socket, user } = props;
+const ChatCanvas: SFC<{ socket: typeof Socket; user: any }> = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    connected: false,
+    socket: io('/chat', { autoConnect: false }),
+    users: [],
+    messages: [],
+  });
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('s connect', socket.id);
-      console.log('s connect', socket);
-    });
+    state.socket.removeAllListeners();
+    state.socket.on('connect', () => dispatch({ type: 'CONNECTED', payload: true }));
+    state.socket.on('disconnect', () => dispatch({ type: 'CONNECTED', payload: false }));
+    state.socket.on('online', (msg: IOnlineMsg) =>
+      dispatch({ type: 'ONLINE', payload: msg.users }),
+    );
+    state.socket.on('exchange', (msg: IMSG) => dispatch({ type: 'EXCHANGE', payload: msg }));
 
-    socket.on('ONLINE', (msg: IOnlineMsg) => {
-      setUsers(msg.users);
-    });
+    if (!state.socket.connected) {
+      state.socket.open();
+    }
 
-    socket.open();
+    return () => {
+      state.socket.disconnect();
+    };
   }, []);
 
+  const send = (txt: string) =>
+    state.socket.emit('exchange', {
+      txt,
+      time: new Date().getTime(),
+    });
+
   return (
-    <div>
-      <Sider user={user} />
-      <Online users={users} />
+    <div className={styles.Wrapper}>
+      <div>status: {JSON.stringify(state.connected)}</div>
+      <div className={styles.Container}>
+        <Online users={state.users} />
+        <Content>
+          <MessageList messages={state.messages} />
+          <EnterMessage send={send} />
+        </Content>
+      </div>
       <div>Chat</div>
     </div>
   );

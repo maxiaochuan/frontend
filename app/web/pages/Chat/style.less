@@ -1,3 +1,39 @@
 .Sider {
   position: relative;
 }
+
+.Wrapper {
+  padding: 100px;
+}
+
+.Container {
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+  margin: auto;
+  border: 1px solid black;
+}
+
+.Online {
+  width: 200px;
+  height: 600px;
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid black;
+}
+
+.Content {
+  width: 100%;
+  .MessageList {
+    height: 500px;
+    border-bottom: 1px solid black;
+  }
+  .EnterMessage {
+    textarea {
+      height: 100px;
+      border: none;
+      border-radius: 0;
+      resize: none;
+    }
+  }
+}

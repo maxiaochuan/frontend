@@ -9,13 +9,16 @@ class ChatController extends Controller {
     const nsp = app.io.of('/chat');
     const message = ctx.args[0] || {};
     const socket = ctx.socket;
-    const client = socket.id;
+    // const client = socket.id;
 
     try {
-      const { target, payload } = message;
-      if (!target) return;
-      const msg = ctx.helper.parseMsg('exchange', payload, { client, target });
-      nsp.emit(target, msg);
+      // const { target, payload } = message;
+      // if (!target) return;
+      // const msg = ctx.helper.parseMsg('exchange', payload, { client, target });
+      nsp.emit('exchange', {
+        from: socket.user,
+        ...message,
+      });
     } catch (error) {
       app.logger.error(error);
     }
