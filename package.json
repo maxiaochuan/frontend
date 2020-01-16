@@ -20,6 +20,7 @@
     "lint-staged": "lint-staged",
     "prettier": "prettier --write \"{,!(node_modules|build)/**/}*.{js,ts,jsx,tsx,less,md}\"",
     "start": "yarn build && egg-scripts start --daemon --title=egg-server-frontend  --sticky",
+    "start:debug": "yarn build && egg-scripts start --title=egg-server-frontend  --sticky",
     "stop": "egg-scripts stop --title=egg-server-frontend",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
